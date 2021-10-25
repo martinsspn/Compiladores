@@ -11,13 +11,21 @@ underline   _
 letter     [a-zA-Z]
 hexLetter  [a-fA-F]
 digit     [0-9]
-char       (letter|digit|())
-comment    "/∗"(∗)?{chars}"∗/"
+char       (letter|digit|" " |())
+comment    ("/∗"|"//")("∗")({char}+)"∗/"
 hextail        ({digit}|{hexLetter}){1,8}
 hex            0[xX]{hextail}
 identifier ({underline}|{letter})({underline}|{letter}|{digit}){0,30}
-bin    [0-1]
+bin    [0-1]+"b"
+int    ("-"|"")({digit}){1,32}
+string \".*.\"
+
+
 %%
+"//".*.                   ;
+"/*".*."*/"               printf("ignorando comentario\n");
+" "                       ;
+
 \n  num_lines++;          col = 0;
 "module"                  col += strlen(yytext); printf("module\n"); 
 "for"                     col += strlen(yytext); printf("for\n");
@@ -52,7 +60,9 @@ bin    [0-1]
 "<<"                      col += strlen(yytext); printf("%s\n", yytext);
 "#import"                 col += strlen(yytext); printf("%s\n", yytext);
 {hex}                     col += strlen(yytext); printf("%s hex\n", yytext);
+{bin}                     col += strlen(yytext); printf("%s bin\n", yytext);
 {int}                     col += strlen(yytext); printf("%s int\n", yytext);
+{string}                  col += strlen(yytext); printf("%s str\n", yytext);
 {identifier}              col += strlen(yytext); printf("%s\n", yytext);
 .                         col += strlen(yytext); printf("unspected char '%s' at line: %d col %d\n", yytext, num_lines,col);
 %%
