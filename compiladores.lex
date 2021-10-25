@@ -3,7 +3,7 @@
  *
  */
 
-int num_lines = 0, col = 0;
+ int num_lines = 0, col = 0;
 
 module  module
 underline   _
@@ -15,16 +15,10 @@ bin    [0-1]
 int    ({+}|{-}|{~})number{1,64}
 
 %%
-\n  ++num_lines; col = 0;
-.   ++col;
-{identifier} testIdentifier(yytext);
+\n  num_lines++; col = 0;
+.   col++;
+{identifier} printf("Found a identifier %s!", yytext);
 %%
-
-#include <string.h>
-
-void testIdentifier(string test){
-    printf("Found a identifier %s!", test);
-}
 
 main()
 {
