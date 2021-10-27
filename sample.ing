@@ -1,8 +1,28 @@
 // ola
+/*
+ * teste
+*/
 
-_1asdf asdf
+tt
+/*
+    teste1
+*/
+
+asdf ess
+
 0x1234f //ola
 
 "oasdf"
+''
+int a;
+
+module globvar;
+
+g : void -> void
+{
+    i = 0;
+    b = false;
+    c = 'b';
+}
 
 start
