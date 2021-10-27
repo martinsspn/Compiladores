@@ -12,6 +12,7 @@ letter     [a-zA-Z]
 hexLetter  [a-fA-F]
 digit     [0-9]
 char       (letter|digit|" " |())
+charobj    "\'"({letter}|{digit}|" "){0,1}"\'"
 comment    ("/∗"|"//")("∗")({char}+)"∗/"
 hextail        ({digit}|{hexLetter}){1,8}
 hex            0[xX]{hextail}
@@ -58,10 +59,15 @@ string \".*.\"
 "%"                       col += strlen(yytext); printf("%s\n", yytext);
 ">>"                      col += strlen(yytext); printf("%s\n", yytext);
 "<<"                      col += strlen(yytext); printf("%s\n", yytext);
+";"                       col += strlen(yytext); printf("%s\n", yytext);
+":"                       col += strlen(yytext); printf("%s\n", yytext);
+"→"                       col += strlen(yytext); printf("%s\n", yytext);
+"="                       col += strlen(yytext); printf("%s\n", yytext);
 "#import"                 col += strlen(yytext); printf("%s\n", yytext);
 {hex}                     col += strlen(yytext); printf("%s hex\n", yytext);
 {bin}                     col += strlen(yytext); printf("%s bin\n", yytext);
 {int}                     col += strlen(yytext); printf("%s int\n", yytext);
+{charobj}                 col += strlen(yytext); printf("%s char\n", yytext);
 {string}                  col += strlen(yytext); printf("%s str\n", yytext);
 {identifier}              col += strlen(yytext); printf("%s\n", yytext);
 .                         col += strlen(yytext); printf("unspected char '%s' at line: %d col %d\n", yytext, num_lines,col);
