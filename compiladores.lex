@@ -4,7 +4,7 @@
  */
 
 %{
-int num_lines = 1, col = 1;
+int col = 1;
 %}
 
 %option yylineno
@@ -32,9 +32,9 @@ COMPLEX    ""/[^/]
 
 %%
 "//".*.                   ;
-"/*"(.|\n)*"*/"        printf("ignorando comentario\n");
+"/*"(.|\n)*"*/"           printf("ignorando comentario\n");
 " "                       ;
-\n  num_lines++;          col = 0;
+\n                        col = 0;
 "module"                  col += yyleng; printf("module\n"); 
 "for"                     col += yyleng; printf("for\n");
 "while"                   col += yyleng; printf("while\n");
