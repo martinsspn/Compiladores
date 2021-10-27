@@ -13,7 +13,7 @@ hexLetter  [a-fA-F]
 digit     [0-9]
 char       (letter|digit|" " |())
 charobj    "\'"({letter}|{digit}|" "){0,1}"\'"
-comment    ("/∗"|"//")("∗")({char}+)"∗/"
+comment    ("/∗"|"//")({char}+)"∗/"
 hextail        ({digit}|{hexLetter}){1,8}
 hex            0[xX]{hextail}
 identifier ({underline}|{letter})({underline}|{letter}|{digit}){0,30}
@@ -24,7 +24,7 @@ string \".*.\"
 
 %%
 "//".*.                   ;
-"/*".*."*/"               printf("ignorando comentario\n");
+"/*"(.|\n)*"*/"               printf("ignorando comentario\n");
 " "                       ;
 
 \n  num_lines++;          col = 0;
