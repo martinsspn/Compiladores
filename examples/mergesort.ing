@@ -1,0 +1,73 @@
+/*
+ *   Merge Sort
+ */
+
+module mergesort;
+
+merge : int arr[], left, mid, right -> void
+{
+    int i, j, k;
+    int n1 = m - l + 1;
+    int n2 = r - m;
+
+    int L[n1], R[n2];
+
+    for(i = 0; i < n1; i++){
+        L[i] = array[l + i];
+    }
+
+    for(j = 0; j < n2; j++){
+        R[j] = array[m + 1 + j];
+    }
+
+    i = 0;
+    j = 0;
+    k = l;
+    
+    while( i < n1 && j < n2){
+        if( L[i] <= R[j]){
+            array[k] = L[i];
+            i++;
+        }
+        else{
+            array[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    while( j < n2 ){
+        array[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+mergesort: int array[], int begin, int end -> void
+{
+    if(begin < end){
+        int m = begin + (end - begin) / 2;
+
+        mergesort(array, begin, m);
+        mergesort(array, m+1, end);
+        
+        merge(array, begin, m, end)
+    }
+}
+
+start main: void -> void
+{
+    int array[6];
+    array[0] = 12;
+    array[1] = 11;
+    array[2] = 13;
+    array[3] = 5;
+    array[4] = 6;
+    array[5] = 7;
+
+    int array_size = sizeof(array) / sizeof(array[0]);
+
+    mergesort(array, 0, array_size - 1);
+
+
+} 
