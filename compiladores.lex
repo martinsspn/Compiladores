@@ -58,12 +58,17 @@ COMPLEX    ""/[^/]
 "}"                       col += yyleng; printf("}\n");
 "("                       col += yyleng; printf("(\n");
 ")"                       col += yyleng; printf(")\n");
+"["                       col += yyleng; printf("(\n");
+"]"                       col += yyleng; printf(")\n");
+","                       col += yyleng; printf(")\n");
 "+"                       col += yyleng; printf("+\n");
 "-"                       col += yyleng; printf("-\n");
 "~"                       col += yyleng; printf("~\n");
 "*"                       col += yyleng; printf("%s\n", yytext);
 "/"                       col += yyleng; printf("%s\n", yytext);
 "%"                       col += yyleng; printf("%s\n", yytext);
+"<"                       col += yyleng; printf("%s\n", yytext);
+">"                       col += yyleng; printf("%s\n", yytext);
 ">>"                      col += yyleng; printf("%s\n", yytext);
 "<<"                      col += yyleng; printf("%s\n", yytext);
 ";"                       col += yyleng; printf("%s\n", yytext);
