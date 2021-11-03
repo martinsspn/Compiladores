@@ -6,7 +6,7 @@ partition : int arr[], low, high -> int
     int pivot = arr[high];
     int i = (low - 1);
     int j = low;
-    while ( j <= high - 1; ) do
+    while ( j <= high - 1) do
     {
         // If current element is smaller than the pivot 
         if (arr[j] < pivot) 
