@@ -83,6 +83,8 @@ COMPLEX    ""/[^/]
 ":"                       col += yyleng; printf("%s\n", yytext);
 "->"                      col += yyleng; printf("%s\n", yytext);
 "="                       col += yyleng; printf("%s\n", yytext);
+"|"                       col += yyleng; printf("%s\n", yytext);
+"?"                       col += yyleng; printf("%s\n", yytext);
 "#import"                 col += yyleng; printf("%s\n", yytext);
 {hex}                     col += yyleng; printf("%s hex\n", yytext);
 {bin}                     col += yyleng; printf("%s bin\n", yytext);
