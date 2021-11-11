@@ -9,7 +9,7 @@ binary_search : int[] array, n, search -> bool
   int last = n - 1;
   int middle = (firs+last)/2;
   
-  while ( first <= last)
+  while ( first <= last) do
   {
     if (array[middle] == search)
     {
