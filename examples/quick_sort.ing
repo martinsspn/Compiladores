@@ -1,6 +1,5 @@
 module test_module;
 
-
 partition : int arr[], low, high -> int
 {
     int pivot = arr[high];
@@ -25,9 +24,9 @@ partition : int arr[], low, high -> int
 }
 
 quickSort: int arr[], low, high -> void
-{ 
+{
     if (low < high)
-    { 
+    {
         int pi = partition(arr, low, high);
         quickSort(arr, low, pi - 1);
         quickSort(arr, pi + 1, high);

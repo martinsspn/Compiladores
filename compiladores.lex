@@ -4,7 +4,10 @@
  */
 
 %{
-int num_lines = 1, col = 1;
+#include "lex.yy.h"
+int col = 1;
+
+
 %}
 
 %option yylineno
@@ -22,85 +25,78 @@ bin    [0-1]+"b"
 int    ("-"|"")({digit}){1,32}
 string \".*.\"
 
-START    "/*"
-END    "*/"
-SIMPLE    [^]
-COMPLEX    ""/[^/]
 
-%s START_COMMENT COMMENT END_COMMENT
+
 
 
 %%
 "//".*.                   ;
-"/*"(.|\n)*"*/"        printf("ignorando comentario\n");
+"/*"(.|\n)*"*/"           printf("ignorando comentario\n");
 " "                       ;
-\n  num_lines++;          col = 0;
-"module"                  col += yyleng; printf("KW_MODULE at line: %d col %d\n", yylineno,col); 
-"while"                   col += yyleng; printf("KW_WHILE at line: %d col %d\n", yylineno,col);
-"extern"                  col += yyleng; printf("KW_EXTERN at line: %d col %d\n", yylineno,col);
-"break"                   col += yyleng; printf("KW_BREAK at line: %d col %d\n", yylineno,col);
-"continue"                col += yyleng; printf("KW_CONTINUE at line: %d col %d\n", yylineno,col);
-"if"                      col += yyleng; printf("KW_IF at line: %d col %d\n", yylineno,col);
-"else"                    col += yyleng; printf("KW_ELSE at line: %d col %d\n", yylineno,col);
-"false"                   col += yyleng; printf("KW_FALSE at line: %d col %d\n", yylineno,col);
-"true"                    col += yyleng; printf("KW_TRUE at line: %d col %d\n", yylineno,col);
-"switch"                  col += yyleng; printf("KW_SWITCH at line: %d col %d\n", yylineno,col);
-"case"                    col += yyleng; printf("KW_CASE at line: %d col %d\n", yylineno,col);
-"default"                 col += yyleng; printf("KW_DEFAULT at line: %d col %d\n", yylineno,col);
-"gotoconsideredharmfu"    col += yyleng; printf("KW_GOTO at line: %d col %d\n", yylineno,col);
-"label"                   col += yyleng; printf("KW_LABEL at line: %d col %d\n", yylineno,col);
-"int"                     col += yyleng; printf("KW_INT at line: %d col %d\n", yylineno,col);
-"bool"                    col += yyleng; printf("KW_BOOL at line: %d col %d\n", yylineno,col);
-"float"                   col += yyleng; printf("KW_FLOAT at line: %d col %d\n", yylineno,col);
-"char"                    col += yyleng; printf("KW_CHAR at line: %d col %d\n", yylineno,col);
-"untyped"                 col += yyleng; printf("KW_UNTYPED at line: %d col %d\n", yylineno,col);
-"void"                    col += yyleng; printf("KW_VOID at line: %d col %d\n", yylineno,col);
-"return"                  col += yyleng; printf("KW_RETURN at line: %d col %d\n", yylineno,col);
-"start"                   col += yyleng; printf("KW_START at line: %d col %d\n", yylineno,col);
-"{"                       col += yyleng; printf("LBRACE at line: %d col %d\n", yylineno,col);
-"}"                       col += yyleng; printf("RBRACE at line: %d col %d\n", yylineno,col);
-"("                       col += yyleng; printf("LPAREN at line: %d col %d\n", yylineno,col);
-")"                       col += yyleng; printf("RPAREN at line: %d col %d\n", yylineno,col);
-"["                       col += yyleng; printf("LBRACKET at line: %d col %d\n", yylineno,col);
-"]"                       col += yyleng; printf("RBRACKET at line: %d col %d\n", yylineno,col);
-","                       col += yyleng; printf("COMMA at line: %d col %d\n", yylineno,col);
-"+"                       col += yyleng; printf("OP_ADD at line: %d col %d\n", yylineno,col);
-"-"                       col += yyleng; printf("OP_SUBTRACT at line: %d col %d\n", yylineno,col);
-"~"                       col += yyleng; printf("OP_BITWISE_COMPLEMENT at line: %d col %d\n", yylineno,col);
-"*"                       col += yyleng; printf("OP_MULTIPLY at line: %d col %d\n", yylineno,col);
-"/"                       col += yyleng; printf("OP_DIVIDE at line: %d col %d\n", yylineno,col);
-"%"                       col += yyleng; printf("OP_MODULUS at line: %d col %d\n", yylineno,col);
-"<"                       col += yyleng; printf("OP_LESS at line: %d col %d\n", yylineno,col);
-"<="                      col += yyleng; printf("OP_LESSEQUAL at line: %d col %d\n", yylineno,col);
-">"                       col += yyleng; printf("OP_GREATER at line: %d col %d\n", yylineno,col);
-">="                      col += yyleng; printf("OP_GREATEREQUAL at line: %d col %d\n", yylineno,col);
-"=="                      col += yyleng; printf("OP_EQUAL at line: %d col %d\n", yylineno,col);
-"!="                      col += yyleng; printf("OP_NOTEQUAL at line: %d col %d\n", yylineno,col);
-"||"                      col += yyleng; printf("OP_LOGICAL_OR at line: %d col %d\n", yylineno,col);
-"!"                       col += yyleng; printf("OP_NOT at line: %d col %d\n", yylineno,col);
-">>"                      col += yyleng; printf("OP_BITWISE_RSHIFT at line: %d col %d\n", yylineno,col);
-"<<"                      col += yyleng; printf("OP_BITWISE_LSHIFT at line: %d col %d\n", yylineno,col);
-"^"                       col += yyleng; printf("OP_BITWISE_XOR at line: %d col %d\n", yylineno,col);
-"&&"                      col += yyleng; printf("OP_LOGICAL_AND at line: %d col %d\n", yylineno,col);
-"&"                       col += yyleng; printf("OP_BITWISE_AND at line: %d col %d\n", yylineno,col);
-";"                       col += yyleng; printf("SEMICOLON at line: %d col %d\n", yylineno,col);
-":"                       col += yyleng; printf("COLON at line: %d col %d\n", yylineno,col);
-"->"                      col += yyleng; printf("ARROW at line: %d col %d\n", yylineno,col);
-"="                       col += yyleng; printf("OP_ASSIGN at line: %d col %d\n", yylineno,col);
-"|"                       col += yyleng; printf("OP_BITWISE_OR at line: %d col %d\n", yylineno,col);
-"?"                       col += yyleng; printf("OP_TERNARY_IF at line: %d col %d\n", yylineno,col);
-"#import"                 col += yyleng; printf("KW_IMPORT at line: %d col %d\n", yylineno,col);
-{hex}                     col += yyleng; printf("%s hex at line: %d col %d\n", yytext, yylineno,col);
-{bin}                     col += yyleng; printf("%s bin at line: %d col %d\n", yytext, yylineno,col);
-{int}                     col += yyleng; printf("%s int at line: %d col %d\n", yytext, yylineno,col);
-{charobj}                 col += yyleng; printf("%s char at line: %d col %d\n", yytext, yylineno,col);
-{string}                  col += yyleng; printf("%s str at line: %d col %d\n", yytext, yylineno,col);
-{identifier}              col += yyleng; printf("%s\n", yytext);
-.                         col += yyleng; printf("unspected char '%s' at line: %d col %d\n", yytext, yylineno,col);
+"\n"                      col = 0;
+"module"                  col += yyleng; return KW_MODULE;
+"while"                   col += yyleng; return KW_WHILE;
+"extern"                  col += yyleng; return KW_EXTERN;
+"break"                   col += yyleng; return KW_BREAK;
+"continue"                col += yyleng; return KW_CONTINUE;
+"if"                      col += yyleng; return KW_IF;
+"else"                    col += yyleng; return KW_ELSE;
+"false"                   col += yyleng; return KW_FALSE;
+"true"                    col += yyleng; return KW_TRUE;
+"switch"                  col += yyleng; return KW_SWITCH;
+"case"                    col += yyleng; return KW_CASE;
+"default"                 col += yyleng; return KW_DEFAULT;
+"gotoconsideredharmful"   col += yyleng; return KW_GOTO;
+"label"                   col += yyleng; return KW_LABEL;
+"int"                     col += yyleng; return KW_INT;
+"bool"                    col += yyleng; return KW_BOOL;
+"float"                   col += yyleng; return KW_FLOAT;
+"char"                    col += yyleng; return KW_CHAR;
+"untyped"                 col += yyleng; return KW_UNTYPED;
+"void"                    col += yyleng; return KW_VOID;
+"return"                  col += yyleng; return KW_RETURN;
+"start"                   col += yyleng; return KW_START;
+"{"                       col += yyleng; return LBRACE;
+"}"                       col += yyleng; return RBRACE;
+"("                       col += yyleng; return LPAREN;
+")"                       col += yyleng; return RPAREN;
+"["                       col += yyleng; return LBRACKET;
+"]"                       col += yyleng; return RBRACKET;
+","                       col += yyleng; return COMMA;
+"+"                       col += yyleng; return OP_ADD;
+"-"                       col += yyleng; return OP_SUBTRACT;
+"~"                       col += yyleng; return OP_BITWISE_COMPLEMENT;
+"*"                       col += yyleng; return OP_MULTIPLY;
+"/"                       col += yyleng; return OP_DIVIDE;
+"%"                       col += yyleng; return OP_MODULUS;
+"<"                       col += yyleng; return OP_LESS;
+"<="                      col += yyleng; return OP_LESSEQUAL;
+">"                       col += yyleng; return OP_GREATER;
+">="                      col += yyleng; return OP_GREATEREQUAL;
+"=="                      col += yyleng; return OP_EQUAL;
+"!="                      col += yyleng; return OP_NOTEQUAL;
+"||"                      col += yyleng; return OP_LOGICAL_OR;
+"!"                       col += yyleng; return OP_NOT;
+">>"                      col += yyleng; return OP_BITWISE_RSHIFT;
+"<<"                      col += yyleng; return OP_BITWISE_LSHIFT;
+"^"                       col += yyleng; return OP_BITWISE_XOR;
+"&&"                      col += yyleng; return OP_LOGICAL_AND;
+"&"                       col += yyleng; return OP_BITWISE_AND;
+";"                       col += yyleng; return SEMICOLON;
+":"                       col += yyleng; return COLON;
+"->"                      col += yyleng; return ARROW;
+"="                       col += yyleng; return OP_ASSIGN;
+"|"                       col += yyleng; return OP_BITWISE_OR;
+"?"                       col += yyleng; return OP_TERNARY_IF;
+"#import"                 col += yyleng; return KW_IMPORT;
+{hex}                     col += yyleng; return HEX;
+{bin}                     col += yyleng; return BIN;
+{int}                     col += yyleng; return INT;
+{charobj}                 col += yyleng; return CHAR;
+{string}                  col += yyleng; return STRING;
+{identifier}              col += yyleng; return IDENTIFIER;
+.                         col += yyleng; return ERROR;
 %%
-
-int main()
-{
-    yylex();
-    return 0;
+int yywrap(void) {
+    return 1;
 }
