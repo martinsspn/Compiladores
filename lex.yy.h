@@ -62,6 +62,7 @@
 #define CHAR                     360
 #define STRING                   361
 #define IDENTIFIER               362
+#define DO                       363
 #define ERROR                    606
 
 
