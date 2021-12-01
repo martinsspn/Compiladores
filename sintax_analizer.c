@@ -818,7 +818,7 @@ int function_moreparam( int &next, int &error)
 
 int function_paramblock_parser(int &next, int &error)
 {
-    if (type_parser(next)){
+    if (!type_parser(next)){
         next = yylex();
         
     }
@@ -943,7 +943,7 @@ int global_parser(int& next, int &error)
         return declaration_parser(next, error);
         break;
     default: // identifier
-        printf("token: %d\n", next);
+        return function_parser(next, error);
         break;
         //       printf("function parser nor implemented\n");
         // function_parser(next, error);
