@@ -6,13 +6,12 @@
 #include <algorithm>
 
 extern int yylex();
-extern int lineno;
+extern int yylineno;
 extern int col;
 
 int expression_parser(int &, int &);
 int function_block_parser (int &, int &);
 int function_declarationblock_parser(int &, int &){return 0;}
-int function_statement_parser(int &, int &){return 0;}
 
 int is_eqoperator(int x)
 {
@@ -58,11 +57,10 @@ int factor(
     if (next == LPAREN)
     {
         next = yylex();
-        printf("hoy %d\n", next);
         expression_parser(next, error);
         if (next != RPAREN)
         {
-            printf("missing close parenthesis\n");
+            printf(" at line: %d, col: %d missing close parenthesis\n",yylineno, col);
             error++;
             return 0;
         }
@@ -354,38 +352,38 @@ int expression_parser( int &next, int &error)
 
 int declaration_parser( int &next, int &error)
 {
-    int x = yylex();
-    while (x == OP_MULTIPLY)
-        x == yylex();
+    next = yylex();
+    while (next == OP_MULTIPLY)
+        next == yylex();
 
-    switch (x)
+    switch (next)
     {
     case IDENTIFIER:
-        x = yylex();
-        if (x == SEMICOLON)
+        next = yylex();
+        if (next == SEMICOLON)
             return 0;
-        if (x != OP_ASSIGN)
+        if (next != OP_ASSIGN)
         {
-            printf("expected either assigment or semicolom");
+            printf(" at line: %d, col: %d expected either assigment or semicolom\n",yylineno, col);
             return ++error;
         }
-        x = yylex();
-        expression_parser(x,error);
+        next = yylex();
+        expression_parser(next, error);
         if (error != 0)
         {
-            printf("malformed expression\n");
+            printf(" at line: %d, col: %d malformed expression\n",yylineno, col);
         }
-        printf("%d\n", x);
-        if (x != SEMICOLON)
+        if (next != SEMICOLON)
         {
-            printf("expected ';'\n");
+            printf(" at line: %d, col: %d expected ';'\n",yylineno, col);
 
             return ++error;
         }
-        yylex();
+        next = yylex();
         return 0;
+        break;
     default:
-        printf("expected declaration\n");
+        printf(" at line: %d, col: %d expected declaration\n",yylineno, col);
         return 0;
     }
     return 0;
@@ -427,7 +425,7 @@ int nextblock_parser( int &next, int &error)
             if (next != RBRACKET)
             {
                 error++;
-                printf("RBRACKET not found");
+                printf(" at line: %d, col: %d RBRACKET not found\n",yylineno, col);
                 return 1;
             }
 
@@ -436,7 +434,7 @@ int nextblock_parser( int &next, int &error)
         else
         {
             error++;
-            printf("RBRACKET not found");
+            printf(" at line: %d, col: %d RBRACKET not found\n",yylineno, col);
             return 1;
         }
     }
@@ -466,7 +464,7 @@ int declarationblock_parser( int &next, int &error)
     }
 
     error++;
-    printf("DECLARATIONBLOCK error");
+    printf(" at line: %d, col: %d DECLARATIONBLOCK error\n",yylineno, col);
     return 1;
 }
 
@@ -477,7 +475,7 @@ int function_switchcases_parser( int &next, int &error)
         next = yylex();
         if(next != INT){
             error++;
-            printf("INT not found");
+            printf(" at line: %d, col: %d INT not found\n",yylineno, col);
             return 1;
         }
         function_block_parser(next, error);
@@ -497,7 +495,7 @@ int function_elseBlock_parser( int &next, int &error)
     return 0;
 }
 
-int function_statemente_parser( int &next, int &error)
+int function_statement_parser( int &next, int &error)
 {
     switch (next)
     {
@@ -506,14 +504,14 @@ int function_statemente_parser( int &next, int &error)
         if (next != IDENTIFIER)
         {
             error++;
-            printf("expected identifier\n");
+            printf(" at line: %d, col: %d expected identifier\n",yylineno, col);
             return 1;
         }
         next = yylex();
         if (next != SEMICOLON)
         {
             error++;
-            printf("SEMICOLON not found\n");
+            printf(" at line: %d, col: %d SEMICOLON not found\n",yylineno, col);
             return 1;
         }
         break;
@@ -521,20 +519,12 @@ int function_statemente_parser( int &next, int &error)
         next = yylex();
         break;
     case KW_BREAK:
-        next = yylex();
-        if (next != SEMICOLON)
-        {
-            error++;
-            printf("SEMICOLON not found");
-            return 1;
-        }
-        break;
     case KW_CONTINUE:
         next = yylex();;
         if (next != SEMICOLON)
         {
             error++;
-            printf("SEMICOLON not found");
+            printf(" at line: %d, col: %d SEMICOLON not found\n",yylineno, col);
             return 1;
         }
         break;
@@ -543,7 +533,7 @@ int function_statemente_parser( int &next, int &error)
         if (next != LPAREN)
         {
             error++;
-            printf("LPARAN not found");
+            printf(" at line: %d, col: %d expected '(' not found\n",yylineno, col);
             return 1;
         }
         next = yylex();
@@ -551,7 +541,7 @@ int function_statemente_parser( int &next, int &error)
         if (next != RPAREN)
         {
             error++;
-            printf("RPARAN not found");
+            printf(" at line: %d, col: %d expected ')' not found\n",yylineno, col);
             return 1;
         }
         next = yylex();
@@ -563,14 +553,14 @@ int function_statemente_parser( int &next, int &error)
         if (next != IDENTIFIER)
         {
             error++;
-            printf("IDENTIFIER not found");
+            printf(" at line: %d, col: %d IDENTIFIER not found\n",yylineno, col);
             return 1;
         }
         next = yylex();
         if (next != SEMICOLON)
         {
             error++;
-            printf("SEMICOLON not found");
+            printf(" at line: %d, col: %d SEMICOLON not found\n",yylineno, col);
             return 1;
         }
         break;
@@ -579,7 +569,7 @@ int function_statemente_parser( int &next, int &error)
         if (next != LPAREN)
         {
             error++;
-            printf("LPARAN not found");
+            printf(" at line: %d, col: %d LPARAN not found\n",yylineno, col);
             return 1;
         }
         next = yylex();
@@ -587,14 +577,14 @@ int function_statemente_parser( int &next, int &error)
         if (next != RPAREN)
         {
             error++;
-            printf("RPARAN not found");
+            printf(" at line: %d, col: %d RPARAN not found\n",yylineno, col);
             return 1;
         }
         next = yylex();
         if (next != DO)
         {
             error++;
-            printf("DO not found");
+            printf(" at line: %d, col: %d DO not found\n",yylineno, col);
             return 1;
         }
         next = yylex();
@@ -606,14 +596,14 @@ int function_statemente_parser( int &next, int &error)
         if (next != KW_WHILE)
         {
             error++;
-            printf("WHILE not found");
+            printf(" at line: %d, col: %d WHILE not found\n",yylineno, col);
             return 1;
         }
         next = yylex();
         if (next != LPAREN)
         {
             error++;
-            printf("LPARAN not found");
+            printf(" at line: %d, col: %d LPARAN not found\n",yylineno, col);
             return 1;
         }
         next = yylex();
@@ -621,7 +611,7 @@ int function_statemente_parser( int &next, int &error)
         if (next != RPAREN)
         {
             error++;
-            printf("RPARAN not found");
+            printf(" at line: %d, col: %d RPARAN not found\n",yylineno, col);
             return 1;
         }
         break;
@@ -630,7 +620,7 @@ int function_statemente_parser( int &next, int &error)
         if (next != LPAREN)
         {
             error++;
-            printf("LPARAN not found");
+            printf(" at line: %d, col: %d LPARAN not found\n",yylineno, col);
             return 1;
         }
         next = yylex();
@@ -638,21 +628,21 @@ int function_statemente_parser( int &next, int &error)
         if (next != RPAREN)
         {
             error++;
-            printf("RPARAN not found");
+            printf(" at line: %d, col: %d RPARAN not found\n",yylineno, col);
             return 1;
         }
         next = yylex();
         if (next != LBRACE)
         {
             error++;
-            printf("LBRACE not found");
+            printf(" at line: %d, col: %d LBRACE not found\n",yylineno, col);
             return 1;
         }
         function_switchcases_parser(next, error);
         if (next != KW_DEFAULT)
         {
             error++;
-            printf("KW_DEFAULT not found");
+            printf(" at line: %d, col: %d KW_DEFAULT not found\n",yylineno, col);
             return 1;
         }
         next = yylex();
@@ -660,16 +650,17 @@ int function_statemente_parser( int &next, int &error)
         if (next != RBRACE)
         {
             error++;
-            printf("RBRACE not found");
+            printf(" at line: %d, col: %d RBRACE not found\n",yylineno, col);
             return 1;
         }
         break;
     case KW_RETURN:
+        next = yylex();
         expression_parser(next, error);
         if (next != SEMICOLON)
         {
             error++;
-            printf("SEMICOLON not found");
+            printf(" at line: %d, col: %d SEMICOLON not found\n",yylineno, col);
             return 1;
         }
         break;
@@ -680,7 +671,7 @@ int function_statemente_parser( int &next, int &error)
             if (next != SEMICOLON)
             {
                 error++;
-                printf("SEMICOLON not found");
+                printf(" at line: %d, col: %d SEMICOLON not found\n",yylineno, col);
                 return 1;
             }
         }
@@ -690,7 +681,7 @@ int function_statemente_parser( int &next, int &error)
             if (next != SEMICOLON)
             {
                 error++;
-                printf("SEMICOLON not found");
+                printf(" at line: %d, col: %d SEMICOLON not found\n",yylineno, col);
                 return 1;
             }
         }
@@ -734,6 +725,7 @@ int function_block_parser( int &next, int &error)
     }
     else
     {
+        printf("expected '{' at line: %d col: %d", yylineno, col);
         error++;
         return 1;
     }
@@ -772,6 +764,11 @@ int function_reference_parser( int &next, int &error)
 
 int function_returntype_parser( int &next, int &error)
 {
+    if (next != ARROW) {
+        error++;
+        return 0;
+    }
+    next = yylex();
     switch (type_parser(next))
     {
     case 1:
@@ -780,11 +777,12 @@ int function_returntype_parser( int &next, int &error)
         function_dimensionblock_parser(next, error);
         return 0;
     default:
+        printf(" at line: %d, col: %d expected return type\n",yylineno, col);
         break;
     }
 
     error++;
-    printf("TYPE not exists");
+    printf(" at line: %d, col: %d TYPE not exists\n",yylineno, col);
     return 0;
 }
 
@@ -795,7 +793,7 @@ int function_param_parser( int &next, int &error)
     if (next != IDENTIFIER)
     {
         error++;
-        printf("IDENTIFIER not exists");
+        printf(" at line: %d, col: %d IDENTIFIER not exists\n",yylineno, col);
         return 1;
     }
 
@@ -816,12 +814,15 @@ int function_moreparam( int &next, int &error)
     return 0;
 }
 
+
 int function_paramblock_parser(int &next, int &error)
 {
     if (!type_parser(next)){
-        next = yylex();
-        
+        error++;
+        printf(" at line: %d, col: %d expected type\n",yylineno, col);
     }
+    next = yylex();
+    function_param_parser(next, error);
     return 0;
 }
 int function_moreparamblock_parser( int &next, int &error)
@@ -832,16 +833,6 @@ int function_moreparamblock_parser( int &next, int &error)
         function_paramblock_parser(next, error);
         function_moreparamblock_parser(next, error);
     }
-    else if (type_parser(next))
-    {
-        next = yylex();
-        function_param_parser(next, error);
-        function_moreparam(next, error);
-    }
-    else
-    {
-    }
-
     return 0;
 }
 
@@ -854,7 +845,6 @@ int function_paramlist_parser( int &next, int &error)
         next = yylex();
         break;
     default:
-        next = yylex();
         function_paramblock_parser(next, error);
         function_moreparamblock_parser(next, error);
         break;
@@ -897,7 +887,7 @@ int function_header_parser( int &next, int &error)
 
     if (next != IDENTIFIER)
     {
-        printf("IDENTIFIER not exists\n");
+        printf(" at line: %d, col: %d IDENTIFIER not exists\n",yylineno, col);
         error++;
         return 1;
     }
@@ -906,7 +896,7 @@ int function_header_parser( int &next, int &error)
 
     if (next != COLON)
     {
-        printf("COLON not exists\n");
+        printf(" at line: %d, col: %d COLON not exists\n",yylineno, col);
         error++;
         return 1;
     }
@@ -917,7 +907,7 @@ int function_header_parser( int &next, int &error)
 
     if (next != ARROW)
     {
-        printf("ARROW not exists\n");
+        printf(" at line: %d, col: %d ARROW not exists\n",yylineno, col);
         error++;
         return 1;
     }
@@ -940,37 +930,30 @@ int global_parser(int& next, int &error)
     switch (type_parser(next))
     {
     case 1: // tipo
-        return declaration_parser(next, error);
+        declaration_parser(next, error);
         break;
     default: // identifier
         return function_parser(next, error);
         break;
-        //       printf("function parser nor implemented\n");
+        //       printf(" at line: %d, col: %d function parser nor implemented\n");
         // function_parser(next, error);
     }
-
-    error++;
-    return 1;
+    return 0;
 }
 
 int globals_parser(int& next, int& error)
 {
-    int x = yylex();
-    if (x == EOI) // EOI = end of input
+    if (next == EOI) // EOI = end of input
         return 0;
-    switch (x)
+    switch (next)
     {
     case KW_EXTERN:
-        x = yylex();
-        global_parser(x,error);
-        return globals_parser(x,error);
+        next = yylex();
+        global_parser(next,error);
+        return globals_parser(next,error);
     default:
-        global_parser(x,error);
-        globals_parser(x,error);
-        if (error == 0)
-        {
-            printf("input consumido nem um erro encontrado\n");
-        }
+        global_parser(next,error);
+        globals_parser(next,error);
         return error;
     }
 }
@@ -982,16 +965,20 @@ void module_parser(int& next, int& error)
     case KW_MODULE:
         if (yylex() == IDENTIFIER && yylex() == SEMICOLON)
         {
+            next = yylex();
             globals_parser(next, error);
         }
         else {
-            printf("expected module declaration\n");
+            printf(" at line: %d, col: %d expected module declaration\n",yylineno, col);
+        }
+        if (error == 0)
+        {
+            printf("input consumido nem um erro encontrado\n");
         }
         break;
     default:
-        printf("expected module declaration\n");
+        printf(" at line: %d, col: %d expected module declaration\n",yylineno, col);
     }
-    error += 1;
 }
 
 int main()

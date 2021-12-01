@@ -1,2 +1,3 @@
 module x;
-bool oi = 4 + (4 <= true * -12);
+bool oi = 4;
+func : int x; bool oi -> bool;

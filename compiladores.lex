@@ -33,8 +33,8 @@ error ("\n"|".")
 %%
 "//".*.                   ;
 "/*"(.|\n)*"*/"           printf("ignorando comentario\n");
-" "                       ;
-."\n"                      col = 0;
+" "                       col++;
+."\n"                     col = 1;
 "module"                  col += yyleng; return KW_MODULE;
 "while"                   col += yyleng; return KW_WHILE;
 "extern"                  col += yyleng; return KW_EXTERN;

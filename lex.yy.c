@@ -1021,13 +1021,13 @@ printf("ignorando comentario\n");
 case 3:
 YY_RULE_SETUP
 #line 36 "compiladores.lex"
-;
+col++;
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
 #line 37 "compiladores.lex"
-col = 0;
+col = 1;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
