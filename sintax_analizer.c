@@ -9,7 +9,10 @@ extern int yylex();
 extern int lineno;
 extern int col;
 
-int expression_parser(const std::vector<int> &, int &, int &);
+int expression_parser(int &, int &);
+int function_block_parser (int &, int &);
+int function_declarationblock_parser(int &, int &){return 0;}
+int function_statement_parser(int &, int &){return 0;}
 
 int is_eqoperator(int x)
 {
@@ -48,337 +51,338 @@ int immediate(int x)
            x == STRING;
 }
 
-int factor(const std::vector<int> &inp,
-           int &index,
+int factor(
+           int &next,
            int &error)
 {
-    if (inp[index] == LPAREN)
+    if (next == LPAREN)
     {
-        index++;
-        expression_parser(inp, index, error);
-        if (inp[index] != RPAREN)
+        next = yylex();
+        printf("hoy %d\n", next);
+        expression_parser(next, error);
+        if (next != RPAREN)
         {
             printf("missing close parenthesis\n");
             error++;
             return 0;
         }
-        index++;
+        next = yylex();
     }
-    else if (immediate(inp[index]))
+    else if (immediate(next))
     {
-        index++;
+        next = yylex();
         return 0;
     }
     return 0;
 }
 
-int unary2(const std::vector<int> &inp,
-           int &index,
+int unary2(
+           int &next,
            int &error)
 {
-    switch (inp[index])
+    switch (next)
     {
     case OP_ADD:      // +=
     case OP_SUBTRACT: //
     case OP_NOT:
-        index++;
-        factor(inp, index, error);
+        next = yylex();
+        factor(next, error);
         break;
     default:
-        factor(inp, index, error);
+        factor(next, error);
         break;
     }
     return 0;
 }
 
-int unary3(const std::vector<int> &inp,
-           int &index,
+int unary3(
+           int &next,
            int &error)
 {
-    switch (inp[index])
+    switch (next)
     {
     case OP_BITWISE_AND: //enderço de memoria
     case OP_MULTIPLY:    //derreferenciar pointer
     case OP_SUBTRACT:    // menos unario
-        index++;
-        unary2(inp, index, error);
+        next = yylex();
+        unary2(next, error);
         break;
     default:
-        unary2(inp, index, error);
+        unary2(next, error);
     }
     return 0;
 }
 
-int rest_multiplication(const std::vector<int> &inp,
-                        int &index,
+int rest_multiplication(
+                        int &next,
                         int &error)
 {
-    if (is_multiplication(inp[index]))
+    if (is_multiplication(next))
     {
-        index++;
-        unary3(inp, index, error);
-        rest_multiplication(inp, index, error);
+        next = yylex();
+        unary3(next, error);
+        rest_multiplication(next, error);
     }
     return 0;
 }
 
-int multiplication(const std::vector<int> &inp,
-                   int &index,
+int multiplication(
+                   int &next,
                    int &error)
 {
-    unary3(inp, index, error);
-    rest_multiplication(inp, index, error);
+    unary3(next, error);
+    rest_multiplication(next, error);
     return 0;
 }
 
-int rest_addition(const std::vector<int> &inp,
-                  int &index,
+int rest_addition(
+                  int &next,
                   int &error)
 {
-    if (is_add_operator(inp[index]))
+    if (is_add_operator(next))
     {
-        multiplication(inp, index, error);
-        rest_addition(inp, index, error);
+        next = yylex();
+        multiplication(next, error);
+        rest_addition(next, error);
     }
     return 0;
 }
 
-int addition(const std::vector<int> &inp,
-             int &index,
+int addition(
+             int &next,
              int &error)
 {
-    multiplication(inp, index, error);
-    rest_addition(inp, index, error);
+    multiplication(next, error);
+    rest_addition(next, error);
     return 0;
 }
 
-int rest_shift(const std::vector<int> &inp,
-               int &index,
+int rest_shift(
+               int &next,
                int &error)
 {
-    if (inp[index] == OP_BITWISE_LSHIFT || inp[index] == OP_BITWISE_RSHIFT)
+    if (next == OP_BITWISE_LSHIFT || next == OP_BITWISE_RSHIFT)
     {
-        index++;
-        addition(inp, index, error);
-        rest_shift(inp, index, error);
+        next = yylex();
+        addition(next, error);
+        rest_shift(next, error);
     }
     return 0;
 }
 
-int shift(const std::vector<int> &inp,
-          int &index,
+int shift(
+          int &next,
           int &error)
 {
-    addition(inp, index, error);
-    rest_shift(inp, index, error);
+    addition(next, error);
+    rest_shift(next, error);
     return 0;
 }
 
-int rest_relation(const std::vector<int> &inp,
-                  int &index,
+int rest_relation(
+                  int &next,
                   int &error)
 {
-    if (is_rel(inp[index]))
+    if (is_rel(next))
     {
-        index++;
-        shift(inp, index, error);
-        rest_relation(inp, index, error);
+        next = yylex();
+        shift(next, error);
+        rest_relation(next, error);
     }
     return 0;
 }
 
-int relation(const std::vector<int> &inp,
-             int &index,
+int relation(
+             int &next,
              int &error)
 {
-    shift(inp, index, error);
-    rest_relation(inp, index, error);
+    shift(next, error);
+    rest_relation(next, error);
     return 0;
 }
 
-int rest_equality(const std::vector<int> &inp,
-                  int &index,
+int rest_equality(
+                  int &next,
                   int &error)
 {
-    if (is_eqoperator(inp[index]))
+    if (is_eqoperator(next))
     {
-        index++;
-        relation(inp, index, error);
-        rest_equality(inp, index, error);
+        next = yylex();
+        relation(next, error);
+        rest_equality(next, error);
     }
     return 0;
 }
 
-int equality(const std::vector<int> &inp,
-             int &index,
+int equality(
+             int &next,
              int &error)
 {
 
-    relation(inp, index, error);
-    rest_equality(inp, index, error);
+    relation(next, error);
+    rest_equality(next, error);
     return 0;
 }
 
-int rest_bitwise_and(const std::vector<int> &inp,
-                     int &index,
+int rest_bitwise_and(
+                     int &next,
                      int &error)
 {
-    if (inp[index] == OP_BITWISE_AND)
+    if (next == OP_BITWISE_AND)
     {
-        equality(inp, index, error);
-        rest_bitwise_and(inp, index, error);
+        next = yylex();
+        equality(next, error);
+        rest_bitwise_and(next, error);
     }
     return 0;
 }
 
-int bitwise_and(const std::vector<int> &inp,
-                int &index,
+int bitwise_and(
+                int &next,
                 int &error)
 {
-    equality(inp, index, error);
-    rest_bitwise_and(inp, index, error);
+    equality(next, error);
+    rest_bitwise_and(next, error);
     return 0;
 }
 
-int rest_bitwise_xor(const std::vector<int> &inp,
-                     int &index,
+int rest_bitwise_xor(
+                     int &next,
                      int &error)
 {
-    if (inp[index] == OP_BITWISE_AND)
+    if (next == OP_BITWISE_AND)
     {
-        index++;
-        bitwise_and(inp, index, error);
-        rest_bitwise_xor(inp, index, error);
+        next = yylex();
+        bitwise_and(next, error);
+        rest_bitwise_xor(next, error);
     }
     return 0;
 }
 
-int bitwise_xor(const std::vector<int> &inp,
-                int &index,
+int bitwise_xor(
+                int &next,
                 int &error)
 {
-    bitwise_and(inp, index, error);
-    rest_bitwise_xor(inp, index, error);
+    bitwise_and(next, error);
+    rest_bitwise_xor(next, error);
     return 0;
 }
 
-int rest_bitwise_or(const std::vector<int> &inp,
-                    int &index,
+int rest_bitwise_or(
+                    int &next,
                     int &error)
 {
-    if (inp[index] == OP_BITWISE_OR)
+    if (next == OP_BITWISE_OR)
     {
-        index++;
-        bitwise_xor(inp, index, error);
-        rest_bitwise_or(inp, index, error);
+        next = yylex();
+        bitwise_xor(next, error);
+        rest_bitwise_or(next, error);
     }
     return 0;
 }
 
-int bitwise_or(const std::vector<int> &inp,
-               int &index,
+int bitwise_or(
+               int &next,
                int &error)
 {
-    bitwise_xor(inp, index, error);
-    rest_bitwise_or(inp, index, error);
+    bitwise_xor(next, error);
+    rest_bitwise_or(next, error);
     return 0;
 }
 
-int rest_logical_and(const std::vector<int> &inp,
-                     int &index,
+int rest_logical_and(
+                     int &next,
                      int &error)
 {
-    if (inp[index] == OP_LOGICAL_AND)
+    if (next == OP_LOGICAL_AND)
     {
-        index++;
-        bitwise_or(inp, index, error);
-        rest_logical_and(inp, index, error);
+        next = yylex();
+        bitwise_or(next, error);
+        rest_logical_and(next, error);
     }
     return 0;
 }
 
-int logical_and(const std::vector<int> &inp,
-                int &index,
+int logical_and(
+                int &next,
                 int &error)
 {
-    bitwise_or(inp, index, error);
-    rest_logical_and(inp, index, error);
+    bitwise_or(next, error);
+    rest_logical_and(next, error);
     return 0;
 }
 
-int rest_logical_or(const std::vector<int> &inp,
-                    int &index,
+int rest_logical_or(
+                    int &next,
                     int &error)
 {
-    if (inp[index] == OP_LOGICAL_OR)
+    if (next == OP_LOGICAL_OR)
     {
-        index++;
-        logical_and(inp, index, error);
-        rest_logical_or(inp, index, error);
+        next = yylex();
+        logical_and(next, error);
+        rest_logical_or(next, error);
     }
     return 0;
 }
 
-int logical_or(const std::vector<int> &inp,
-               int &index,
+int logical_or(int &next,
                int &error)
 {
-    logical_and(inp, index, error);
-    rest_logical_or(inp, index, error);
+    logical_and(next, error);
+    rest_logical_or(next, error);
     return 0;
 }
 
-int rest_expression(const std::vector<int> &inp,
-                    int &index,
+int rest_expression(int &next,
                     int &error)
 {
-    if (inp[index] == OP_ASSIGN)
+    if (next == OP_ASSIGN)
     {
-        index++;
-        logical_or(inp, index, error);
-        rest_expression(inp, index, error);
+        next = yylex();
+        logical_or(next, error);
+        rest_expression(next, error);
     }
     return 0;
 }
 
-int expression_parser(const std::vector<int> &inp, int &index, int &error)
+int expression_parser( int &next, int &error)
 {
-    logical_or(inp, index, error);
-    rest_expression(inp, index, error);
+    logical_or(next, error);
+    rest_expression(next, error);
     return 0;
 }
 
-int declaration_parser(const std::vector<int> &inp, int &index, int &error)
+int declaration_parser( int &next, int &error)
 {
-    index++;
-    while (inp[index] == OP_MULTIPLY)
-        index++;
+    int x = yylex();
+    while (x == OP_MULTIPLY)
+        x == yylex();
 
-    switch (inp[index])
+    switch (x)
     {
     case IDENTIFIER:
-        index++;
-        if (inp[index] == SEMICOLON)
+        x = yylex();
+        if (x == SEMICOLON)
             return 0;
-        if (inp[index] != OP_ASSIGN)
+        if (x != OP_ASSIGN)
         {
             printf("expected either assigment or semicolom");
-
             return ++error;
         }
-        index++;
-        expression_parser(inp, index, error);
+        x = yylex();
+        expression_parser(x,error);
         if (error != 0)
         {
             printf("malformed expression\n");
         }
-        if (inp[index] != SEMICOLON)
+        printf("%d\n", x);
+        if (x != SEMICOLON)
         {
             printf("expected ';'\n");
 
             return ++error;
         }
-        index++;
+        yylex();
         return 0;
     default:
         printf("expected declaration\n");
@@ -397,39 +401,37 @@ int type_parser(int x)
     return r;
 }
 
-int function_paramblock_parser(const std::vector<int> &inp, int &index, int &error)
-{
-}
 
-int initializer(const std::vector<int> &inp, int &index, int &error)
+
+int initializer( int &next, int &error)
 {
 
-    if (inp[index] == OP_EQUAL)
+    if (next == OP_ASSIGN)
     {
-        index++;
-        expression_parser(inp, index, error);
+        next = yylex();
+        expression_parser(next, error);
     }
 
     return 0;
 }
 
-int indexblock_parser(const std::vector<int> &inp, int &index, int &error)
+int nextblock_parser( int &next, int &error)
 {
-    if (inp[index] == LBRACKET)
+    if (next == LBRACKET)
     {
-        index++;
+        next = yylex();
 
-        if (inp[index] == INT)
+        if (next == INT)
         {
-            index++;
-            if (inp[index] != RBRACKET)
+            next = yylex();
+            if (next != RBRACKET)
             {
                 error++;
                 printf("RBRACKET not found");
                 return 1;
             }
 
-            indexblock_parser(inp, index, error);
+            nextblock_parser(next, error);
         }
         else
         {
@@ -441,26 +443,26 @@ int indexblock_parser(const std::vector<int> &inp, int &index, int &error)
     return 0;
 }
 
-int restdeclaration_parser(const std::vector<int> &inp, int &index, int &error)
+int restdeclaration_parser( int &next, int &error)
 {
-    if (inp[index] == COMMA)
+    if (next == COMMA)
     {
-        index++;
-        declaration_parser(inp, index, error);
-        restdeclaration_parser(inp, index, error);
+        next = yylex();
+        declaration_parser(next, error);
+        restdeclaration_parser(next, error);
     }
 
     return 0;
 }
 
-int declarationblock_parser(const std::vector<int> &inp, int &index, int &error)
+int declarationblock_parser( int &next, int &error)
 {
 
-    if (type_parser(inp[index]))
+    if (type_parser(next))
     {
-        index++;
-        declaration_parser(inp, index, error);
-        restdeclaration_parser(inp, index, error);
+        next = yylex();
+        declaration_parser(next, error);
+        restdeclaration_parser(next, error);
     }
 
     error++;
@@ -468,58 +470,59 @@ int declarationblock_parser(const std::vector<int> &inp, int &index, int &error)
     return 1;
 }
 
-int function_switchcases_parser(const std::vector<int> &inp, int &index, int &error)
+int function_switchcases_parser( int &next, int &error)
 {
-    if (inp[index] == KW_CASE)
+    if (next == KW_CASE)
     {
-        index++;
-        if(inp[index] != INT){
+        next = yylex();
+        if(next != INT){
             error++;
             printf("INT not found");
             return 1;
         }
-        function_block_parser(inp, index, error);
+        function_block_parser(next, error);
     }
 
     return 0;
 }
 
-int function_elseBlock_parser(const std::vector<int> &inp, int &index, int &error)
+int function_elseBlock_parser( int &next, int &error)
 {
-    if (inp[index] == KW_ELSE)
+    if (next == KW_ELSE)
     {
-        index++;
-        function_block_parser(inp, index, error);
+        next = yylex();
+        function_block_parser(next, error);
     }
 
     return 0;
 }
 
-int function_statemente_parser(const std::vector<int> &inp, int &index, int &error)
+int function_statemente_parser( int &next, int &error)
 {
-    switch (inp[index])
+    switch (next)
     {
     case KW_LABEL:
-        index++;
-        if (inp[index] != IDENTIFIER)
+        next = yylex();
+        if (next != IDENTIFIER)
         {
             error++;
-            printf("IDENTIFIER not exists");
+            printf("expected identifier\n");
             return 1;
         }
-        index++;
-        if (inp[index] != SEMICOLON)
+        next = yylex();
+        if (next != SEMICOLON)
         {
             error++;
-            printf("SEMICOLON not found");
+            printf("SEMICOLON not found\n");
             return 1;
         }
         break;
     case SEMICOLON:
+        next = yylex();
         break;
     case KW_BREAK:
-        index++;
-        if (inp[index] != SEMICOLON)
+        next = yylex();
+        if (next != SEMICOLON)
         {
             error++;
             printf("SEMICOLON not found");
@@ -527,8 +530,8 @@ int function_statemente_parser(const std::vector<int> &inp, int &index, int &err
         }
         break;
     case KW_CONTINUE:
-        index++;
-        if (inp[index] != SEMICOLON)
+        next = yylex();;
+        if (next != SEMICOLON)
         {
             error++;
             printf("SEMICOLON not found");
@@ -536,35 +539,35 @@ int function_statemente_parser(const std::vector<int> &inp, int &index, int &err
         }
         break;
     case KW_IF:
-        index++;
-        if (inp[index] != LPAREN)
+        next = yylex();
+        if (next != LPAREN)
         {
             error++;
             printf("LPARAN not found");
             return 1;
         }
-        index++;
-        expression_parser(inp, index, error);
-        if (inp[index] != RPAREN)
+        next = yylex();
+        expression_parser(next, error);
+        if (next != RPAREN)
         {
             error++;
             printf("RPARAN not found");
             return 1;
         }
-        index++;
-        function_block_parser(inp, index, error);
-        function_elseBlock_parser(inp, index, error);
+        next = yylex();
+        function_block_parser(next, error);
+        function_elseBlock_parser(next, error);
         break;
     case KW_GOTO:
-        index++;
-        if (inp[index] != IDENTIFIER)
+        next = yylex();
+        if (next != IDENTIFIER)
         {
             error++;
             printf("IDENTIFIER not found");
             return 1;
         }
-        index++;
-        if (inp[index] != SEMICOLON)
+        next = yylex();
+        if (next != SEMICOLON)
         {
             error++;
             printf("SEMICOLON not found");
@@ -572,50 +575,50 @@ int function_statemente_parser(const std::vector<int> &inp, int &index, int &err
         }
         break;
     case KW_WHILE:
-        index++;
-        if (inp[index] != LPAREN)
+        next = yylex();
+        if (next != LPAREN)
         {
             error++;
             printf("LPARAN not found");
             return 1;
         }
-        index++;
-        expression_parser(inp, index, error);
-        if (inp[index] != RPAREN)
+        next = yylex();
+        expression_parser(next, error);
+        if (next != RPAREN)
         {
             error++;
             printf("RPARAN not found");
             return 1;
         }
-        index++;
-        if (inp[index] != DO)
+        next = yylex();
+        if (next != DO)
         {
             error++;
             printf("DO not found");
             return 1;
         }
-        index++;
-        function_block_parser(inp, index, error);
+        next = yylex();
+        function_block_parser(next, error);
         break;
     case DO:
-        index++;
-        function_block_parser(inp, index, error);
-        if (inp[index] != WHILE)
+        next = yylex();
+        function_block_parser(next, error);
+        if (next != KW_WHILE)
         {
             error++;
             printf("WHILE not found");
             return 1;
         }
-        index++;
-        if (inp[index] != LPAREN)
+        next = yylex();
+        if (next != LPAREN)
         {
             error++;
             printf("LPARAN not found");
             return 1;
         }
-        index++;
-        expression_parser(inp, index, error);
-        if (inp[index] != RPAREN)
+        next = yylex();
+        expression_parser(next, error);
+        if (next != RPAREN)
         {
             error++;
             printf("RPARAN not found");
@@ -623,38 +626,38 @@ int function_statemente_parser(const std::vector<int> &inp, int &index, int &err
         }
         break;
     case KW_SWITCH:
-        index++;
-        if (inp[index] != LPAREN)
+        next = yylex();
+        if (next != LPAREN)
         {
             error++;
             printf("LPARAN not found");
             return 1;
         }
-        index++;
-        expression_parser(inp, index, error);
-        if (inp[index] != RPAREN)
+        next = yylex();
+        expression_parser(next, error);
+        if (next != RPAREN)
         {
             error++;
             printf("RPARAN not found");
             return 1;
         }
-        index++;
-        if (inp[index] != LBRACE)
+        next = yylex();
+        if (next != LBRACE)
         {
             error++;
             printf("LBRACE not found");
             return 1;
         }
-        function_switchcases_parser(inp, index, error);
-        if (inp[index] != KW_DEFAULT)
+        function_switchcases_parser(next, error);
+        if (next != KW_DEFAULT)
         {
             error++;
             printf("KW_DEFAULT not found");
             return 1;
         }
-        index++;
-        function_block_parser(inp, index, error);
-        if (inp[index] != RBRACE)
+        next = yylex();
+        function_block_parser(next, error);
+        if (next != RBRACE)
         {
             error++;
             printf("RBRACE not found");
@@ -662,8 +665,8 @@ int function_statemente_parser(const std::vector<int> &inp, int &index, int &err
         }
         break;
     case KW_RETURN:
-        expression_parser(inp, index, error);
-        if (inp[index] != SEMICOLON)
+        expression_parser(next, error);
+        if (next != SEMICOLON)
         {
             error++;
             printf("SEMICOLON not found");
@@ -671,10 +674,10 @@ int function_statemente_parser(const std::vector<int> &inp, int &index, int &err
         }
         break;
     default:
-        if (type_parser(inp[index]))
+        if (type_parser(next))
         {
-            function_declarationblock_parser(inp, index, error);
-            if (inp[index] != SEMICOLON)
+            function_declarationblock_parser(next, error);
+            if (next != SEMICOLON)
             {
                 error++;
                 printf("SEMICOLON not found");
@@ -683,8 +686,8 @@ int function_statemente_parser(const std::vector<int> &inp, int &index, int &err
         }
         else
         {
-            expression_parser(inp, index, error);
-            if (inp[index] != SEMICOLON)
+            expression_parser(next, error);
+            if (next != SEMICOLON)
             {
                 error++;
                 printf("SEMICOLON not found");
@@ -694,39 +697,40 @@ int function_statemente_parser(const std::vector<int> &inp, int &index, int &err
         break;
     }
 
-    index++;
+    next = yylex();;
     return 0;
 }
 
-int function_code_parser(const std::vector<int> &inp, int &index, int &error)
+int function_code_parser( int &next, int &error)
 {
-    if (inp[index] == LBRACE)
+    if (next == LBRACE)
     {
-        function_block_parser(inp, index, error);
-        function_code_parser(inp, index, error);
+        function_block_parser(next, error);
+        function_code_parser(next, error);
     }
     else
     {
-        function_statement_parser(inp, index, error);
-        function_code_parser(inp, index, error);
+        function_statement_parser(next, error);
+        function_code_parser(next, error);
     }
 
     return 0;
 }
 
-int function_block_parser(const std::vector<int> &inp, int &index, int &error)
+int function_block_parser( int &next, int &error)
 {
-    if (inp[index] == LBRACE)
+    if (next == LBRACE)
     {
-        index++;
+        next = yylex();
 
-        function_code_parser(inp, index, error);
+        function_code_parser(next, error);
 
-        if (inp[index] == RBRACE)
+        if (next == RBRACE)
         {
-            index++;
+            next = yylex();
             return 0;
         }
+        return 0;
     }
     else
     {
@@ -735,16 +739,16 @@ int function_block_parser(const std::vector<int> &inp, int &index, int &error)
     }
 }
 
-int function_dimensionblock_parser(const std::vector<int> &inp, int &index, int &error)
+int function_dimensionblock_parser( int &next, int &error)
 {
-    if (inp[index] == LBRACKET)
+    if (next == LBRACKET)
     {
-        index++;
-        if (inp[index] == RBRACKET)
+        next = yylex();
+        if (next == RBRACKET)
         {
-            index++;
-            function_dimensionblock_parser(inp, index, error);
-            retun 0;
+            next = yylex();
+            function_dimensionblock_parser(next, error);
+            return 0;
         }
         else
         {
@@ -756,24 +760,25 @@ int function_dimensionblock_parser(const std::vector<int> &inp, int &index, int 
     return 0;
 }
 
-int function_reference_parser(const std::vector<int> &inp, int &index, int &error)
+int function_reference_parser( int &next, int &error)
 {
-    if (inp[index] == OP_MULTIPLY)
+    if (next == OP_MULTIPLY)
     {
-        index++;
-        function_reference_parser(inp, index, error);
+        next = yylex();
+        function_reference_parser(next, error);
     }
     return 0;
 }
 
-int function_returntype_parser(const std::vector<int> &inp, int &index, int &error)
+int function_returntype_parser( int &next, int &error)
 {
-    switch (type_parser(inp[index]))
+    switch (type_parser(next))
     {
     case 1:
-        index++;
-        function_reference_parser(inp, index, error);
-        function_dimensionblock_parser(inp, index, error);
+        next = yylex();
+        function_reference_parser(next, error);
+        function_dimensionblock_parser(next, error);
+        return 0;
     default:
         break;
     }
@@ -783,47 +788,55 @@ int function_returntype_parser(const std::vector<int> &inp, int &index, int &err
     return 0;
 }
 
-int function_param_parser(const std::vector<int> &inp, int &index, int &error)
+int function_param_parser( int &next, int &error)
 {
-    function_reference_parser(inp, index, error);
+    function_reference_parser(next, error);
 
-    if (inp[index] != IDENTIFIER)
+    if (next != IDENTIFIER)
     {
         error++;
         printf("IDENTIFIER not exists");
         return 1;
     }
 
-    index++;
+    next = yylex();
 
-    function_dimensionblock_parser(inp, index, error);
+    function_dimensionblock_parser(next, error);
     return 0;
 }
 
-int function_moreparam(const std::vector<int> &inp, int &index, int &error)
+int function_moreparam( int &next, int &error)
 {
-    if (inp[index] == COMMA)
+    if (next == COMMA)
     {
-        index++;
-        function_param_parser(inp, index, error);
-        function_moreparam(inp, index, error);
+        next = yylex();
+        function_param_parser(next, error);
+        function_moreparam(next, error);
     }
     return 0;
 }
 
-int function_moreparamblock_parser(const std::vector<int> &inp, int &index, int &error)
+int function_paramblock_parser(int &next, int &error)
 {
-    if (inp[index] == SEMICOLON)
-    {
-        index++;
-        function_paramblock_parser(inp, index, error);
-        function_moreparamblock_parser(inp, index, error);
+    if (type_parser(next)){
+        next = yylex();
+        
     }
-    else if (type_parser(inp[index]))
+    return 0;
+}
+int function_moreparamblock_parser( int &next, int &error)
+{
+    if (next == SEMICOLON)
     {
-        index++;
-        function_param_parser(inp, index, error);
-        function_moreparam(inp, index, error);
+        next = yylex();
+        function_paramblock_parser(next, error);
+        function_moreparamblock_parser(next, error);
+    }
+    else if (type_parser(next))
+    {
+        next = yylex();
+        function_param_parser(next, error);
+        function_moreparam(next, error);
     }
     else
     {
@@ -832,28 +845,29 @@ int function_moreparamblock_parser(const std::vector<int> &inp, int &index, int 
     return 0;
 }
 
-int function_paramlist_parser(const std::vector<int> &inp, int &index, int &error)
+
+int function_paramlist_parser( int &next, int &error)
 {
-    switch (inp[index])
+    switch (next)
     {
     case KW_VOID:
-        index++;
+        next = yylex();
         break;
     default:
-        index++;
-        function_paramblock_parser(inp, index, error);
-        function_moreparamblock_parser(inp, index, error);
+        next = yylex();
+        function_paramblock_parser(next, error);
+        function_moreparamblock_parser(next, error);
         break;
     }
     return 0;
 }
 
-int function_modifiers_parser(const std::vector<int> &inp, int &index, int &error)
+int function_modifiers_parser( int &next, int &error)
 {
-    switch (inp[index])
+    switch (next)
     {
     case KW_START:
-        index++;
+        next = yylex();
         break;
     default:
         break;
@@ -862,98 +876,97 @@ int function_modifiers_parser(const std::vector<int> &inp, int &index, int &erro
     return 0;
 }
 
-int function_rest_parser(const std::vector<int> &inp, int &index, int &error)
+int function_rest_parser( int &next, int &error)
 {
-    switch (inp[index])
+    switch (next)
     {
     case SEMICOLON:
-        index++;
+        next = yylex();
         break;
     default:
-        return function_block_parser(inp, index, error);
+        return function_block_parser(next, error);
         break;
     }
 
     return 0;
 }
 
-int function_header_parser(const std::vector<int> &inp, int &index, int &error)
+int function_header_parser( int &next, int &error)
 {
-    function_modifiers_parser(inp, index, error);
+    function_modifiers_parser(next, error);
 
-    if (inp[index] != IDENTIFIER)
+    if (next != IDENTIFIER)
     {
         printf("IDENTIFIER not exists\n");
         error++;
         return 1;
     }
 
-    index++;
+    next = yylex();
 
-    if (inp[index] != COLON)
+    if (next != COLON)
     {
         printf("COLON not exists\n");
         error++;
         return 1;
     }
 
-    index++;
+    next = yylex();
 
-    function_paramlist_parser(inp, index, error);
+    function_paramlist_parser(next, error);
 
-    if (inp[index] != ARROW)
+    if (next != ARROW)
     {
         printf("ARROW not exists\n");
         error++;
         return 1;
     }
 
-    function_returntype_parser(inp, index, error);
+    function_returntype_parser(next, error);
 
     return 0;
 }
 
-int function_parser(const std::vector<int> &inp, int &index, int &error)
+int function_parser( int &next, int &error)
 {
-    function_header_parser(inp, index, error);
-    function_rest_parser(inp, index, error);
+    function_header_parser(next, error);
+    function_rest_parser(next, error);
 
     return 0;
 }
 
-int global_parser(const std::vector<int> &inp, int &index, int &error)
+int global_parser(int& next, int &error)
 {
-    switch (type_parser(inp[index]))
+    switch (type_parser(next))
     {
     case 1: // tipo
-        return declaration_parser(inp, index, error);
+        return declaration_parser(next, error);
         break;
     default: // identifier
-        printf("token: %d\n", inp[index]);
-        index++;
+        printf("token: %d\n", next);
         break;
         //       printf("function parser nor implemented\n");
-        // function_parser(inp, index, error);
+        // function_parser(next, error);
     }
 
-    ++error;
+    error++;
     return 1;
 }
 
-int globals_parser(const std::vector<int> &inp, int &index, int &error)
+int globals_parser(int& next, int& error)
 {
-    if (inp[index] == 0)
+    int x = yylex();
+    if (x == EOI) // EOI = end of input
         return 0;
-    switch (inp[index])
+    switch (x)
     {
     case KW_EXTERN:
-        index++;
-        global_parser(inp, index, error);
-        return globals_parser(inp, index, error);
+        x = yylex();
+        global_parser(x,error);
+        return globals_parser(x,error);
     default:
-        global_parser(inp, index, error);
-
-        globals_parser(inp, index, error);
+        global_parser(x,error);
+        globals_parser(x,error);
         if (error == 0)
         {
             printf("input consumido nem um erro encontrado\n");
@@ -962,54 +975,28 @@ int globals_parser(const std::vector<int> &inp, int &index, int &error)
     }
 }
 
-int module_parser(const std::vector<int> &inp, int &index, int &error)
+void module_parser(int& next, int& error)
 {
-    switch (inp[index])
+    switch (next)
     {
     case KW_MODULE:
-        index++;
-
-        if (inp[index] == IDENTIFIER && inp[index + 1] == SEMICOLON)
+        if (yylex() == IDENTIFIER && yylex() == SEMICOLON)
         {
-            index += 2;
-            return globals_parser(inp, index, error);
+            globals_parser(next, error);
+        }
+        else {
+            printf("expected module declaration\n");
         }
         break;
     default:
         printf("expected module declaration\n");
     }
     error += 1;
-    return 1;
-}
-
-void clean(std::vector<int> &inp)
-{
-    for (int i = 0; i < inp.size() - 1; i++)
-    {
-        if (inp[i] != 606)
-            continue;
-        inp.erase(inp.begin() + i);
-    }
 }
 
 int main()
 {
-    int x = yylex();
-    std::vector<int> inp;
-    inp.push_back(x);
-    while (x)
-    {
-        x = yylex();
-        inp.push_back(x);
-    }
-    clean(inp);
-    while (*(inp.end() - 1) < 10)
-        inp.erase(inp.end() - 1);
-    for (int e : inp)
-        printf("%d\n", e);
-    int index = 0, error = 0;
-    printf("resultado %d\n", module_parser(inp, index, error));
-
-    printf("index = %d e tamanho entrada = %ld\n", index, inp.size());
+    int next = yylex(), error = 0;
+    module_parser(next,error);
     return 0;
 }

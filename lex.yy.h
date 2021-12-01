@@ -64,6 +64,7 @@
 #define IDENTIFIER               362
 #define DO                       363
 #define ERROR                    606
+#define EOI                      0
 
 
 int yylex();

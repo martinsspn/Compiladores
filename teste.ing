@@ -1,2 +1,2 @@
 module x;
-bool oi = 4 + (4 - 11) >= true;
+bool oi = 4 + (4 <= true * -12);

@@ -24,6 +24,7 @@ identifier (\_|{letter})(\_|{letter}|{digit}){0,30}
 bin    [0-1]+"b"
 int    ("-"|"")({digit}){1,32}
 string \".*.\"
+error ("\n"|".")
 
 
 
@@ -33,7 +34,7 @@ string \".*.\"
 "//".*.                   ;
 "/*"(.|\n)*"*/"           printf("ignorando comentario\n");
 " "                       ;
-"\n"                      col = 0;
+."\n"                      col = 0;
 "module"                  col += yyleng; return KW_MODULE;
 "while"                   col += yyleng; return KW_WHILE;
 "extern"                  col += yyleng; return KW_EXTERN;
