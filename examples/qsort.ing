@@ -8,14 +8,13 @@ partition : int arr[], low, high -> int
     while ( j <= high - 1) do
     {
         // If current element is smaller than the pivot 
-        if (arr[j] < pivot) 
-        { 
-            i++; // increment index of smaller element 
+        if (arr[j] < pivot) {
+            i = i + 1; // increment index of smaller element
             int a = arr[i];
             arr[i] = arr[j];
             arr[j] = a;
         }
-        j++
+        j = j + i;
     }
     int a = arr[i + 1];
     arr[i + 1] = arr[high];
@@ -36,5 +35,5 @@ quickSort: int arr[], low, high -> void
 
 start main: void -> void
 {
-
+    return 0;
 }

@@ -1,8 +1,10 @@
 module sorts;
 
-insertionSort : int arr[], int size -> void 
+insertionSort : int arr[], size -> void
 {
-    int i, j, key;
+    int i = 4;
+    int j = 4;
+    int key;
     i = 1;
     while(i < size) do
     {

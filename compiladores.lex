@@ -31,10 +31,11 @@ error ("\n"|".")
 
 
 %%
-"//".*.                   ;
-"/*"(.|\n)*"*/"           printf("ignorando comentario\n");
+"//".*                    ;
+"/*"(.|\n)*"*/"           ;
 " "                       col++;
 ."\n"                     col = 1;
+"do"                      col += yyleng; return DO;
 "module"                  col += yyleng; return KW_MODULE;
 "while"                   col += yyleng; return KW_WHILE;
 "extern"                  col += yyleng; return KW_EXTERN;

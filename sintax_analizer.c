@@ -11,7 +11,7 @@ extern int col;
 
 int expression_parser(int &, int &);
 int function_block_parser (int &, int &);
-int function_declarationblock_parser(int &, int &){return 0;}
+int declarationblock_parser(int &, int &);
 
 int is_eqoperator(int x)
 {
@@ -40,14 +40,51 @@ int is_multiplication(int x)
 
 int immediate(int x)
 {
-    return x == IDENTIFIER ||
-           x == INT ||
+    return x == INT ||
            x == HEX ||
            x == BIN ||
            x == KW_TRUE ||
            x == KW_FALSE ||
            x == CHAR ||
            x == STRING;
+}
+
+int more_expression(int &next, int &error) {
+    switch(next) {
+        case COMMA:
+            next = yylex();
+            expression_parser(next, error);
+            more_expression(next, error);
+            break;
+    }
+    return 0;
+}
+
+int application_parser(int &next, int &error) {
+    switch(next) {
+        case LBRACKET:
+            next = yylex();
+            expression_parser(next, error);
+            if (next != RBRACKET) {
+                printf("at line: %d col: %d expected ']'\n", yylineno, col);
+                error++;
+            }
+            next = yylex();
+            application_parser(next, error);
+            break;
+        case LPAREN:
+            next = yylex();
+            expression_parser(next, error);
+            more_expression(next, error);
+            if (next != RPAREN) {
+                error++;
+                printf("at line: %d col: %d expected ')'\n", yylineno, col);
+            }
+            next = yylex();
+        default:
+            return 0;
+    }
+    return 0;
 }
 
 int factor(
@@ -66,9 +103,14 @@ int factor(
         }
         next = yylex();
     }
+    else if (next == IDENTIFIER){
+        next = yylex();
+        application_parser(next,error);
+    }
     else if (immediate(next))
     {
         next = yylex();
+        
         return 0;
     }
     return 0;
@@ -355,13 +397,23 @@ int declaration_parser( int &next, int &error)
     next = yylex();
     while (next == OP_MULTIPLY)
         next == yylex();
-
     switch (next)
     {
     case IDENTIFIER:
         next = yylex();
-        if (next == SEMICOLON)
+        if (next == SEMICOLON) {
+            next = yylex();
             return 0;
+        }
+        if (next == LBRACKET) {
+            next = yylex();
+            expression_parser(next, error);
+            if (next != RBRACKET) {
+                printf("at line: %d col: %d expected ']'\n", yylineno, col);
+            }
+            next = yylex();
+            return 0;
+        }
         if (next != OP_ASSIGN)
         {
             printf(" at line: %d, col: %d expected either assigment or semicolom\n",yylineno, col);
@@ -380,7 +432,6 @@ int declaration_parser( int &next, int &error)
             return ++error;
         }
         next = yylex();
-        return 0;
         break;
     default:
         printf(" at line: %d, col: %d expected declaration\n",yylineno, col);
@@ -401,7 +452,7 @@ int type_parser(int x)
 
 
 
-int initializer( int &next, int &error)
+int initializer(int &next, int &error)
 {
 
     if (next == OP_ASSIGN)
@@ -458,9 +509,9 @@ int declarationblock_parser( int &next, int &error)
 
     if (type_parser(next))
     {
-        next = yylex();
         declaration_parser(next, error);
         restdeclaration_parser(next, error);
+        return 0;
     }
 
     error++;
@@ -514,6 +565,7 @@ int function_statement_parser( int &next, int &error)
             printf(" at line: %d, col: %d SEMICOLON not found\n",yylineno, col);
             return 1;
         }
+        next = yylex();
         break;
     case SEMICOLON:
         next = yylex();
@@ -527,6 +579,7 @@ int function_statement_parser( int &next, int &error)
             printf(" at line: %d, col: %d SEMICOLON not found\n",yylineno, col);
             return 1;
         }
+        next = yylex();
         break;
     case KW_IF:
         next = yylex();
@@ -614,6 +667,11 @@ int function_statement_parser( int &next, int &error)
             printf(" at line: %d, col: %d RPARAN not found\n",yylineno, col);
             return 1;
         }
+        if (next != SEMICOLON){
+            error++;
+            printf(" at line: %d, col: %d ';'\n", yylineno, col);
+        }
+        next = yylex();
         break;
     case KW_SWITCH:
         next = yylex();
@@ -660,20 +718,26 @@ int function_statement_parser( int &next, int &error)
         if (next != SEMICOLON)
         {
             error++;
-            printf(" at line: %d, col: %d SEMICOLON not found\n",yylineno, col);
+            printf("at line: %d, col: %d SEMICOLON after expression not found\n",yylineno, col);
             return 1;
         }
+        next = yylex();
+        break;
+    case IDENTIFIER:
+        next = yylex();
+        application_parser(next, error);
+        initializer(next, error);
+        if (next != SEMICOLON){
+            error++;
+            printf("at line %d col: %d expected ';'\n", yylineno, col);
+            return 0;
+        }
+        next = yylex();
         break;
     default:
         if (type_parser(next))
         {
-            function_declarationblock_parser(next, error);
-            if (next != SEMICOLON)
-            {
-                error++;
-                printf(" at line: %d, col: %d SEMICOLON not found\n",yylineno, col);
-                return 1;
-            }
+            declarationblock_parser(next, error);
         }
         else
         {
@@ -681,19 +745,19 @@ int function_statement_parser( int &next, int &error)
             if (next != SEMICOLON)
             {
                 error++;
-                printf(" at line: %d, col: %d SEMICOLON not found\n",yylineno, col);
+                printf("%d at line: %d, col: %d SEMICOLON not found\n",next,yylineno, col);
                 return 1;
             }
+            next = yylex();
         }
         break;
     }
-
-    next = yylex();;
     return 0;
 }
 
 int function_code_parser( int &next, int &error)
 {
+    if (next == RBRACE) return 0;
     if (next == LBRACE)
     {
         function_block_parser(next, error);
@@ -725,7 +789,7 @@ int function_block_parser( int &next, int &error)
     }
     else
     {
-        printf("expected '{' at line: %d col: %d", yylineno, col);
+        printf("expected '{' at line: %d col: %d\n", yylineno, col);
         error++;
         return 1;
     }
@@ -769,7 +833,7 @@ int function_returntype_parser( int &next, int &error)
         return 0;
     }
     next = yylex();
-    switch (type_parser(next))
+    switch (type_parser(next) || next == KW_VOID)
     {
     case 1:
         next = yylex();
@@ -823,6 +887,7 @@ int function_paramblock_parser(int &next, int &error)
     }
     next = yylex();
     function_param_parser(next, error);
+    function_moreparam(next,error);
     return 0;
 }
 int function_moreparamblock_parser( int &next, int &error)
@@ -913,13 +978,14 @@ int function_header_parser( int &next, int &error)
     }
 
     function_returntype_parser(next, error);
-
+    
     return 0;
 }
 
 int function_parser( int &next, int &error)
 {
     function_header_parser(next, error);
+
     function_rest_parser(next, error);
 
     return 0;
@@ -963,19 +1029,23 @@ void module_parser(int& next, int& error)
     switch (next)
     {
     case KW_MODULE:
-        if (yylex() == IDENTIFIER && yylex() == SEMICOLON)
         {
-            next = yylex();
-            globals_parser(next, error);
+            int identi = yylex();
+            int semicol = yylex();
+            if (identi == IDENTIFIER && semicol == SEMICOLON)
+            {
+                next = yylex();
+                globals_parser(next, error);
+            }
+            else {
+                printf("hoy at line: %d, col: %d expected module declaration\n",yylineno, col);
+            }
+            if (error == 0)
+            {
+                printf("input consumido nem um erro encontrado\n");
+            }
+            break;
         }
-        else {
-            printf(" at line: %d, col: %d expected module declaration\n",yylineno, col);
-        }
-        if (error == 0)
-        {
-            printf("input consumido nem um erro encontrado\n");
-        }
-        break;
     default:
         printf(" at line: %d, col: %d expected module declaration\n",yylineno, col);
     }

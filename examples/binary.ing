@@ -1,9 +1,6 @@
 module binary_search;
 
-// takes an sorted array [sArray] of size [n] 
-// and returns true if [sArray] contains [val],
-// false otherwise
-binary_search : int[] array, n, search -> bool
+binary_search : int array[], n, search -> bool
 {
   int first = 0;
   int last = n - 1;
@@ -15,7 +12,7 @@ binary_search : int[] array, n, search -> bool
     {
       first = middle + 1;
     }
-    else if (array[middle] == search) 
+    if (array[middle] == search) 
     {
       return true;
     }

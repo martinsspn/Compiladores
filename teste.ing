@@ -1,3 +1,17 @@
-module x;
+module test_module;
 bool oi = 4;
-func : int x; bool oi -> bool;
+
+func : int x; bool oi -> bool {
+    while (5 + 8) do {
+        break;
+        continue;
+        if (vec(9, 9) > 19) {
+            continue;
+        } else {
+            break;
+            continue;
+        }
+        return 9;
+    }
+    return 8;
+}
