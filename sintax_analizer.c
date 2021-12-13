@@ -1,8 +1,6 @@
 #include "lex.yy.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <vector>
-#include <climits>
 #include <algorithm>
 
 extern int yylex();
