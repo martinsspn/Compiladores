@@ -24,7 +24,9 @@ int main(){
     std::vector<int> globals_1 = {NT_GLOBAL, NT_GLOBALS};
     std::vector<int> globals_2 = {KW_EXTERN, NT_GLOBAL, NT_GLOBALS};
     std::unordered_map<int, std::vector<int>> globals_rule;
+    
     globals_rule.insert({EOI, globals_ });
+
     globals_rule.insert({T_BOOL, globals_1 });
     globals_rule.insert({T_CHAR, globals_1 });
     globals_rule.insert({T_FLOAT, globals_1 });
@@ -32,9 +34,11 @@ int main(){
     globals_rule.insert({T_UNTYPE, globals_1 });
     globals_rule.insert({KW_START, globals_1 });
     globals_rule.insert({IDENTIFIER, globals_1 });
-    globals_rule.insert({COLON, globals_1 });
+    globals_rule.insert({SEMICOLON, globals_1 });
     globals_rule.insert({LBRACE, globals_1});
+
     globals_rule.insert({KW_EXTERN, globals_2});
+    
     tabela.insert({NT_GLOBALS, globals_rule});
 
     std::vector<int> global_ = {NT_FUNCTION};
@@ -45,35 +49,31 @@ int main(){
         {IDENTIFIER, global_},
         {SEMICOLON, global_},
         {LBRACE, global_},
+        {KW_EXTERN, global_},
+
         {T_BOOL, global_1},
         {T_CHAR, global_1},
         {T_FLOAT, global_1},
         {T_INT, global_1},
         {T_UNTYPE, global_1},
-        
-        {T_BOOL, global_},
-        {T_CHAR, global_},
-        {T_FLOAT, global_},
-        {T_INT, global_},
-        {T_UNTYPE, global_},
-        {EOI, global_},
-        {KW_START, global_},
-        {IDENTIFIER, global_},
-        {SEMICOLON, global_},
-        {LBRACE, global_},
-        {NT_DECLARATIONBLOCK, global_1}
     };
     tabela.insert({NT_GLOBAL, global_rule});
 
     std::vector<int> function_ = {NT_FUNCTIONHEADER, NT_FUNCTIONREST};
     std::unordered_map<int, std::vector<int>> function_rule = {
-        {NT_FUNCTIONHEADER, function_}
+        {EOI, function_},
+        {KW_START, function_},
+        {IDENTIFIER, function_},
+        {SEMICOLON, function_},
+        {LBRACE, function_}
     };
     tabela.insert({NT_FUNCTION, function_rule});
 
     std::vector<int> functionheader_ = {NT_MODIFIERS, IDENTIFIER, COLON, NT_PARAMLIST, ARROW, NT_RETURNTYPE};
     std::unordered_map<int, std::vector<int>> functionheader_rule = {
-        {NT_MODIFIERS, functionheader_}
+        {EOI, functionheader_},
+        {KW_START, functionheader_},
+        {IDENTIFIER, functionheader_}
     };
     tabela.insert({NT_FUNCTIONHEADER, functionheader_rule});
     
@@ -82,7 +82,40 @@ int main(){
     std::vector<int> functionrest_1 = {NT_BLOCK};
     std::unordered_map<int, std::vector<int>> functionrest_rule = {
         {SEMICOLON, functionrest_},
-        {NT_BLOCK, functionrest_1}
+        
+        {EOI, functionrest_1},
+        {KW_EXTERN, functionrest_1},
+        {T_BOOL, functionrest_1},
+        {T_CHAR, functionrest_1},
+        {T_FLOAT, functionrest_1},
+        {T_INT, functionrest_1},
+        {T_UNTYPE, functionrest_1},
+        {KW_START, functionrest_1},
+        {IDENTIFIER, functionrest_1},
+        {LBRACE, functionrest_1},
+        {RBRACE, functionrest_1},
+        {KW_LABEL, functionrest_1},
+        {KW_BREAK, functionrest_1},
+        {KW_CONTINUE, functionrest_1},
+        {KW_IF, functionrest_1},
+        {GOTO, functionrest_1},
+        {KW_WHILE, functionrest_1},
+        {DO, functionrest_1},
+        {KW_SWITCH, functionrest_1},
+        {KW_RETURN, functionrest_1},
+        {OP_BITWISE_AND, functionrest_1},
+        {OP_MULTIPLY, functionrest_1},
+        {OP_SUBTRACT, functionrest_1},
+        {LPAREN, functionrest_1},
+        {OP_ADD, functionrest_1},
+        {OP_NOT, functionrest_1},
+        {KW_TRUE, functionrest_1},
+        {KW_FALSE, functionrest_1},
+        {T_CHAR, functionrest_1},
+        {T_FLOAT, functionrest_1},
+        {T_INT, functionrest_1},
+        {KW_ELSE, functionrest_1},
+        {KW_DEFAULT, functionrest_1}
     };
     tabela.insert({NT_FUNCTIONREST, functionrest_rule});
     
@@ -207,7 +240,7 @@ int main(){
     std::unordered_map<int, std::vector<int>> _rule = {
         {}
     };
-    tabela.insert({, _rule});
+    // tabela.insert({, _rule});
 
     std::stack<int> order;
 
