@@ -100,6 +100,10 @@
 #define NT_SWITCHCASES          522
 #define NT_DECLARATION          523
 #define NT_RESTDECLARATION      524
+#define NT_INDEXBLOCK           525
+#define NT_INITIALIZER          526
+#define NT_LOGICALOR            527
+#define NT_RESTEXPRESSION       528
 
 int yylex();
 #endif
