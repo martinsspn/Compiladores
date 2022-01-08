@@ -56,15 +56,18 @@
 #define OP_BITWISE_OR            354
 #define OP_TERNARY_IF            355
 #define KW_IMPORT                356
-#define HEX                      357
-#define BIN                      358
-#define INT                      359
-#define CHAR                     360
-#define STRING                   361
-#define IDENTIFIER               362
-#define DO                       363
-#define GOTO                     364
-#define EMPTY                    365
+#define TRUE                     357
+#define FALSE                    358
+#define HEX                      359
+#define BIN                      360
+#define INT                      361
+#define CHAR                     362
+#define FLOAT                    363
+#define STRING                   364
+#define IDENTIFIER               365
+#define DO                       366
+#define GOTO                     367
+#define EMPTY                    368
 #define ERROR                    606
 #define EOI                      0
 
@@ -104,6 +107,42 @@
 #define NT_INITIALIZER          526
 #define NT_LOGICALOR            527
 #define NT_RESTEXPRESSION       528
+#define NT_LOGICALAND           529
+#define NT_RESTLOGICALOR        530
+#define NT_LOGICALOR            531
+#define NT_BITWISEOR            532
+#define NT_RESTLOGICALAND       533
+#define NT_BITWISEXOR           534
+#define NT_RESTBITWISEOR        535
+#define NT_BITWISEAND           536
+#define NT_RESTBITWISEXOR       537
+#define NT_EQUALITY             538
+#define NT_RESTBITWISEAND       539
+#define NT_RELATION             540
+#define NT_RESTEQUALITY         541
+#define NT_EQUALITYOPERATOR     542
+#define NT_SHIFT                543
+#define NT_SHIFT                544
+#define NT_RELATIONOPERATOR     545
+#define NT_RESTRELATION         546
+#define NT_ADDITION             547
+#define NT_RESTSHIFT            548
+#define NT_SHIFTOPERATOR        549
+#define NT_MULTIPLICATION       550
+#define NT_RESTADDITION         551
+#define NT_ADDITIONOPERATOR     552
+#define NT_ADDITIONOPERATOR     553
+#define NT_UNARY3               554     
+#define NT_RESTMULTIPLICATION   555
+#define NT_MULTIPLICATIONOPERATOR 556
+#define NT_UNARY2               557
+#define NT_UNARY3OPERATOR       558
+#define NT_FACTOR               559
+#define NT_UNARY2OPERATOR       560
+#define NT_APPLICATION          561
+#define NT_IMMEDIATE            562
+#define NT_MOREEXPRESSION       563
+
 
 int yylex();
 #endif
