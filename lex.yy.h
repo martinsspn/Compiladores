@@ -66,7 +66,6 @@
 #define STRING                   364
 #define IDENTIFIER               365
 #define DO                       366
-#define KW_GOTO                  367
 #define EMPTY                    368
 #define ERROR                    606
 #define EOI                      0

@@ -925,9 +925,10 @@ int main()
     int next = yylex();
     int error = 0;
 
+    
     order.push(next);
 
-    std::cout << "Passou - " << next << "\n";
+    // std::cout << "Passou - " << next << "\n";
 
     while (!order.empty() and next != EOI)
     {
@@ -948,6 +949,8 @@ int main()
                 }
                 else
                 {
+                    std::cout << top << " !================ " << next << "\n";
+
                     // caso contrario erro
                     std::cout << "TERMINAL NÃO RECONHECIDO\n";
                     break;
@@ -968,7 +971,7 @@ int main()
             }
     
 
-        std::cout << "Passou - " << next << "\n";
+        // std::cout << "Passou - " << next << "\n";
     }
 
     return 0;
