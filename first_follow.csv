@@ -87,39 +87,78 @@ INDEXBLOCK,"{'',[}","{;,,,=}",50,"{;,,,=}"
 ,,,51,[
 INITIALIZER,"{'',=}","{;,,}",52,"{;,,}"
 ,,,53,=
-EXPRESSION,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,],=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-RESTEXPRESSION,"{'',=}","{),;,,,],=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-LOGICALOR,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,],||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-RESTLOGICALOR,"{'',||}","{),;,,,=,],||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-LOGICALAND,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,],&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-RESTLOGICALAND,"{'',&&}","{),;,,,=,||,],&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-BITWISEOR,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,],|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-RESTBITWISEOR,"{'',|}","{),;,,,=,||,&&,],|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-BITWISEXOR,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,],^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-RESTBITWISEXOR,"{'',^}","{),;,,,=,||,&&,|,],^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-BITWISEAND,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,],&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-RESTBITWISEAND,"{'',&}","{),;,,,=,||,&&,|,^,],&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-EQUALITY,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,],==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-RESTEQUALITY,"{'',==,!=}","{),;,,,=,||,&&,|,^,&,],==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-EQUALITYOPERATOR,"{==,!=}","{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}",,
-RELATION,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,],<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-RESTRELATION,"{'',<,<=,>,>=}","{),;,,,=,||,&&,|,^,&,==,!=,],<,<=,>,>=,<<,>>,+,-,*,/,%}",,
-RELATIONOPERATOR,"{<,<=,>,>=}","{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}",,
-SHIFT,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,],<<,>>,+,-,*,/,%}",,
-RESTSHIFT,"{'',<<,>>}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,],<<,>>,+,-,*,/,%}",,
-SHIFTOPERATOR,"{<<,>>}","{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}",,
-ADDITION,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,],+,-,*,/,%}",,
-RESTADDITION,"{'',+,-}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,],+,-,*,/,%}",,
-ADDITIONOPERATOR,"{+,-}","{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}",,
-MULTIPLICATION,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,],*,/,%}",,
-RESTMULTIPLICATION,"{'',*,/,%}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,],*,/,%}",,
-MULTIPLICATIONOPERATOR,"{*,/,%}","{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}",,
-UNARY3,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%,]}",,
-UNARY3OPERATOR,"{&,*,-}","{IDENTIFIER,(,+,-,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}",,
-UNARY2,"{IDENTIFIER,(,+,-,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%,]}",,
-UNARY2OPERATOR,"{+,-,!}","{IDENTIFIER,(,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}",,
-FACTOR,"{IDENTIFIER,(,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%,]}",,
-APPLICATION,"{[,(}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%,]}",,
-MOREEXPRESSION,"{'',,}",{)},,
-TYPE,"{bool,char,float,int,untyped}","{=>,;,*,IDENTIFIER,,,{,[]}",,
-IMMEDIATE,"{true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%,]}",,
+EXPRESSION,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,],=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",54,"IDENTIFIER, true, false, char, float, int, untyped, ("
+RESTEXPRESSION,"{'',=}","{),;,,,],=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",55,"{),;,,,],||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}"
+,,,56,=
+LOGICALOR,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,],||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",61,"IDENTIFIER, true, false, char, float, int, untyped, ("
+RESTLOGICALOR,"{'',||}","{),;,,,=,],||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",62,"{),;,,,=,],||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}"
+,,,63,||
+LOGICALAND,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,],&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",65,"IDENTIFIER, true, false, char, float, int, untyped, ("
+RESTLOGICALAND,"{'',&&}","{),;,,,=,||,],&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",66,"{),;,,,=,||,],&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}"
+,,,67,&&
+BITWISEOR,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,],|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",69,"IDENTIFIER, true, false, char, float, int, untyped, ("
+RESTBITWISEOR,"{'',|}","{),;,,,=,||,&&,],|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",70,"{),;,,,=,||,],&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}"
+,,,71,|
+BITWISEXOR,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,],^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",73,"IDENTIFIER, true, false, char, float, int, untyped, ("
+RESTBITWISEXOR,"{'',^}","{),;,,,=,||,&&,|,],^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",74,"{),;,,,=,||,],&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}"
+,,,75,^
+BITWISEAND,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,],&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",77,"IDENTIFIER, true, false, char, float, int, untyped, ("
+RESTBITWISEAND,"{'',&}","{),;,,,=,||,&&,|,^,],&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",78,"{),;,,,=,||,],&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}"
+,,,79,&
+EQUALITY,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,],==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",81,"IDENTIFIER, true, false, char, float, int, untyped, ("
+RESTEQUALITY,"{'',==,!=}","{),;,,,=,||,&&,|,^,&,],==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}",82,"{),;,,,=,||,],&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}"
+,,,83,"{==, !=}"
+EQUALITYOPERATOR,"{==,!=}","{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}",85,{==}
+,,,86,{!=}
+RELATION,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,],<,<=,>,>=,<<,>>,+,-,*,/,%}",88,"IDENTIFIER, true, false, char, float, int, untyped, ("
+RESTRELATION,"{'',<,<=,>,>=}","{),;,,,=,||,&&,|,^,&,==,!=,],<,<=,>,>=,<<,>>,+,-,*,/,%}",89,"{),;,,,=,||,],&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}"
+,,,90,"{<, <=, >, >=}"
+RELATIONOPERATOR,"{<,<=,>,>=}","{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}",92,<
+,,,93,<=
+,,,94,>
+,,,95,>=
+SHIFT,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,],<<,>>,+,-,*,/,%}",97,"IDENTIFIER, true, false, char, float, int, untyped, ("
+RESTSHIFT,"{'',<<,>>}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,],<<,>>,+,-,*,/,%}",98,"{),;,,,=,||,],&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%}"
+,,,99,"{<<, >>}"
+SHIFTOPERATOR,"{<<,>>}","{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}",101,<<
+,,,102,>>
+ADDITION,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,],+,-,*,/,%}",104,"IDENTIFIER, true, false, char, float, int, untyped, ("
+RESTADDITION,"{'',+,-}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,],+,-,*,/,%}",105,"{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,],+,-,*,/,%}"
+,,,106,"{+,-}"
+ADDITIONOPERATOR,"{+,-}","{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}",107,+
+,,,108,-
+MULTIPLICATION,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,],*,/,%}",109,"IDENTIFIER, true, false, char, float, int, untyped, ("
+RESTMULTIPLICATION,"{'',*,/,%}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,],*,/,%}",110,"{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,],*,/,%}"
+,,,111,"{*, /, %}"
+MULTIPLICATIONOPERATOR,"{*,/,%}","{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}",112,*
+,,,113,/
+,,,114,%
+UNARY3,"{&,*,-,IDENTIFIER,(,+,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%,]}",116,"IDENTIFIER, true, false, char, float, int, untyped, ("
+,,,117,"{&, *, -}"
+UNARY3OPERATOR,"{&,*,-}","{IDENTIFIER,(,+,-,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}",118,&
+,,,119,*
+,,,120,-
+UNARY2,"{IDENTIFIER,(,+,-,!,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%,]}",122,"IDENTIFIER, true, false, char, float, int, untyped, ("
+,,,123,"{+,-,!}"
+UNARY2OPERATOR,"{+,-,!}","{IDENTIFIER,(,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}",124,+
+,,,125,-
+,,,126,!
+FACTOR,"{IDENTIFIER,(,true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%,]}",128,IDENTIFIER
+,,,129,"true, false, char, float, int, untyped"
+,,,130,(
+APPLICATION,"{[,(}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%,]}",132,"{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%,]}"
+,,,133,[
+,,,134,(
+MOREEXPRESSION,"{'',,}",{)},135,{)}
+,,,136,","
+TYPE,"{bool,char,float,int,untyped}","{=>,;,*,IDENTIFIER,,,{,[]}",137,bool
+,,,138,char
+,,,139,float
+,,,140,int
+,,,141,untyped
+IMMEDIATE,"{true,false,CHAR_LITERAL,FLOAT_LITERAL,INT_LITERAL,STRING_LITERAL}","{),;,,,=,||,&&,|,^,&,==,!=,<,<=,>,>=,<<,>>,+,-,*,/,%,]}",142,true
+,,,143,false
+,,,144,char_literal
+,,,145,float_literal
+,,,146,int_literal
+,,,147,string_literal
