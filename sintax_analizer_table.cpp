@@ -221,10 +221,10 @@ int main(){
         int top = order.top();
 
         if(top > 349){
-            if(top == next){
+            if(top == next) {
                 order.pop();
                 next = yylex();
-            } else{
+            } else {
                 std::cout << "TERMINAL NÃO RECONHECIDO\n";
                 break;
             }
