@@ -23,6 +23,7 @@ hex            0[xX]{hextail}
 identifier (\_|{letter})(\_|{letter}|{digit}){0,30}
 bin    [0-1]+"b"
 int    ("-"|"")({digit}){1,32}
+floatpoint {int}("."|""){digit}{0,32}
 string \".*.\"
 error ("\n"|".")
 
@@ -58,6 +59,7 @@ error ("\n"|".")
 "void"                    col += yyleng; return KW_VOID;
 "return"                  col += yyleng; return KW_RETURN;
 "start"                   col += yyleng; return KW_START;
+"->"                      col += yyleng; return ARROW;
 "{"                       col += yyleng; return LBRACE;
 "}"                       col += yyleng; return RBRACE;
 "("                       col += yyleng; return LPAREN;
@@ -86,7 +88,6 @@ error ("\n"|".")
 "&"                       col += yyleng; return OP_BITWISE_AND;
 ";"                       col += yyleng; return SEMICOLON;
 ":"                       col += yyleng; return COLON;
-"->"                      col += yyleng; return ARROW;
 "="                       col += yyleng; return OP_ASSIGN;
 "|"                       col += yyleng; return OP_BITWISE_OR;
 "?"                       col += yyleng; return OP_TERNARY_IF;
@@ -94,6 +95,7 @@ error ("\n"|".")
 {hex}                     col += yyleng; return HEX;
 {bin}                     col += yyleng; return BIN;
 {int}                     col += yyleng; return INT;
+{floatpoint}              col += yyleng; return FLOAT;
 {charobj}                 col += yyleng; return CHAR;
 {string}                  col += yyleng; return STRING;
 {identifier}              col += yyleng; return IDENTIFIER;

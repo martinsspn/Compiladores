@@ -13,7 +13,7 @@
 #define KW_SWITCH                309
 #define KW_CASE                  310
 #define KW_DEFAULT               311
-#define KW_ OTO                  312
+#define KW_GOTO                  312
 #define KW_LABEL                 313
 #define KW_INT                   314
 #define KW_BOOL                  315

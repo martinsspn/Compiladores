@@ -1,6 +1,6 @@
 module mergesort;
 
-merge:int arr[], left, mid, right -> void
+merge: int arr[], left, mid, right -> void
 {
     int i = 0;
     int j = 0;

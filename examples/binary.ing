@@ -1,10 +1,11 @@
 module binary_search;
 
+
 binary_search : int array[], n, search -> bool
 {
   int first = 0;
   int last = n - 1;
-  int middle = (firs+last)/2;
+  int middle = (firs + last ) / 2;
   
   while ( first <= last) do
   {
@@ -20,8 +21,6 @@ binary_search : int array[], n, search -> bool
     {
       last = middle - 1;
     }
-  } 
+  }
   return false;
 }
-
-
