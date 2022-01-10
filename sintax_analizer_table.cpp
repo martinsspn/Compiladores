@@ -77,6 +77,7 @@ int main()
 
     std::vector<int> functionheader_ = {NT_MODIFIERS, IDENTIFIER, COLON, NT_PARAMLIST, ARROW, NT_RETURNTYPE};
     std::unordered_map<int, std::vector<int>> functionheader_rule = {
+        {IDENTIFIER, functionheader_},
         {SEMICOLON, functionheader_},
         {KW_START, functionheader_},
         {LBRACE, functionheader_}};
@@ -86,7 +87,6 @@ int main()
     std::vector<int> functionrest_1 = {NT_BLOCK};
     std::unordered_map<int, std::vector<int>> functionrest_rule = {
         {SEMICOLON, functionrest_},
-
         {LBRACE, functionrest_1},
     };
     tabela.insert({NT_FUNCTIONREST, functionrest_rule});
@@ -925,16 +925,24 @@ int main()
     int next = yylex();
     int error = 0;
 
-    
-    order.push(next);
+    auto lin_ = tabela.at(NT_MODULE);
+    auto col_ = lin_.at(KW_MODULE);
+    size_t sz = col_.size();
+    std::cout << "sz = " << sz << "\n";
 
-    // std::cout << "Passou - " << next << "\n";
+    for(int i = sz-1; i >= 0 ; i--){
+        order.push(col_[i]);
+        std::cout << col_[i] << std::endl;
+    }
+
+    std::cout << "Passou - " << next << "\n";
 
     while (!order.empty() and next != EOI)
     {
 
         int top = order.top();
 
+        if(top != EMPTY){
             // se o topo da pilha for um terminal
             if (top >= 300 && top < 500)
             {
@@ -945,7 +953,7 @@ int main()
                     order.pop();
                     // avanca
                     next = yylex();
-                    order.push(next);
+                    // order.push(next);
                 }
                 else
                 {
@@ -958,10 +966,13 @@ int main()
             }
             else
             {
+                order.pop();
+                std::cout << "Analisando - Top = " << top << " - Next = " << next << "\n";
+
                 // troca o topo da pilha pela lista em tabela(top(), entrada)
                 auto linha_ = tabela.at(top);
                 auto coluna_ = linha_.at(next);
-                int sz_col = sizeof(coluna_) / sizeof(coluna_[0]);
+                int sz_col = coluna_.size();
                 // lendo de trás para frente
                 for (int i = sz_col - 1; i >= 0; i--)
                 {
@@ -970,8 +981,10 @@ int main()
                 }
             }
     
-
-        // std::cout << "Passou - " << next << "\n";
+        } else{
+            next = yylex();
+        }
+        std::cout << "Passou - " << next << "\n";
     }
 
     return 0;
