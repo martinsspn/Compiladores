@@ -66,7 +66,7 @@
 #define STRING                   364
 #define IDENTIFIER               365
 #define DO                       366
-#define GOTO                     367
+#define KW_GOTO                  367
 #define EMPTY                    368
 #define ERROR                    606
 #define EOI                      0
@@ -109,7 +109,6 @@
 #define NT_RESTEXPRESSION       528
 #define NT_LOGICALAND           529
 #define NT_RESTLOGICALOR        530
-#define NT_LOGICALOR            531
 #define NT_BITWISEOR            532
 #define NT_RESTLOGICALAND       533
 #define NT_BITWISEXOR           534
@@ -122,7 +121,6 @@
 #define NT_RESTEQUALITY         541
 #define NT_EQUALITYOPERATOR     542
 #define NT_SHIFT                543
-#define NT_SHIFT                544
 #define NT_RELATIONOPERATOR     545
 #define NT_RESTRELATION         546
 #define NT_ADDITION             547
@@ -131,7 +129,6 @@
 #define NT_MULTIPLICATION       550
 #define NT_RESTADDITION         551
 #define NT_ADDITIONOPERATOR     552
-#define NT_ADDITIONOPERATOR     553
 #define NT_UNARY3               554     
 #define NT_RESTMULTIPLICATION   555
 #define NT_MULTIPLICATIONOPERATOR 556

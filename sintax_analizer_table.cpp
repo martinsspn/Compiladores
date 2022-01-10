@@ -5,13 +5,14 @@
 #include <utility>
 #include <stack>
 
-int main(){
+int main()
+{
 
     // linhas = não terminais | colunas = terminais
     std::unordered_map<int, std::unordered_map<int, std::vector<int>>> tabela;
-    
+
     // REGRA MODULE (INVERTER A LISTA)
-    std::vector<int> module_ = {KW_MODULE, IDENTIFIER, SEMICOLON, NT_GLOBALS };
+    std::vector<int> module_ = {KW_MODULE, IDENTIFIER, SEMICOLON, NT_GLOBALS};
     // define a coluna
     std::unordered_map<int, std::vector<int>> module_rule;
     // insere a lista na célula
@@ -24,21 +25,21 @@ int main(){
     std::vector<int> globals_1 = {NT_GLOBAL, NT_GLOBALS};
     std::vector<int> globals_2 = {KW_EXTERN, NT_GLOBAL, NT_GLOBALS};
     std::unordered_map<int, std::vector<int>> globals_rule;
-    
-    globals_rule.insert({EOI, globals_ });
 
-    globals_rule.insert({T_BOOL, globals_1 });
-    globals_rule.insert({T_CHAR, globals_1 });
-    globals_rule.insert({T_FLOAT, globals_1 });
-    globals_rule.insert({T_INT, globals_1 });
-    globals_rule.insert({T_UNTYPE, globals_1 });
-    globals_rule.insert({KW_START, globals_1 });
-    globals_rule.insert({IDENTIFIER, globals_1 });
-    globals_rule.insert({SEMICOLON, globals_1 });
+    globals_rule.insert({EOI, globals_});
+
+    globals_rule.insert({T_BOOL, globals_1});
+    globals_rule.insert({T_CHAR, globals_1});
+    globals_rule.insert({T_FLOAT, globals_1});
+    globals_rule.insert({T_INT, globals_1});
+    globals_rule.insert({T_UNTYPE, globals_1});
+    globals_rule.insert({KW_START, globals_1});
+    globals_rule.insert({IDENTIFIER, globals_1});
+    globals_rule.insert({SEMICOLON, globals_1});
     globals_rule.insert({LBRACE, globals_1});
 
     globals_rule.insert({KW_EXTERN, globals_2});
-    
+
     tabela.insert({NT_GLOBALS, globals_rule});
 
     std::vector<int> global_ = {NT_FUNCTION};
@@ -71,36 +72,31 @@ int main(){
         {KW_START, function_},
         {IDENTIFIER, function_},
         {SEMICOLON, function_},
-        {LBRACE, function_}
-    };
+        {LBRACE, function_}};
     tabela.insert({NT_FUNCTION, function_rule});
 
     std::vector<int> functionheader_ = {NT_MODIFIERS, IDENTIFIER, COLON, NT_PARAMLIST, ARROW, NT_RETURNTYPE};
     std::unordered_map<int, std::vector<int>> functionheader_rule = {
         {SEMICOLON, functionheader_},
         {KW_START, functionheader_},
-        {LBRACE, functionheader_}
-    };
+        {LBRACE, functionheader_}};
     tabela.insert({NT_FUNCTIONHEADER, functionheader_rule});
-    
 
     std::vector<int> functionrest_ = {SEMICOLON};
     std::vector<int> functionrest_1 = {NT_BLOCK};
     std::unordered_map<int, std::vector<int>> functionrest_rule = {
         {SEMICOLON, functionrest_},
-        
+
         {LBRACE, functionrest_1},
     };
     tabela.insert({NT_FUNCTIONREST, functionrest_rule});
-    
 
     std::vector<int> modifiers_ = {EMPTY};
     std::vector<int> modifiers_1 = {KW_START};
     std::unordered_map<int, std::vector<int>> modifiers_rule = {
         {IDENTIFIER, modifiers_},
-        {KW_START, modifiers_1}
-    };
-    tabela.insert({NT_MODIFIERS ,modifiers_rule});
+        {KW_START, modifiers_1}};
+    tabela.insert({NT_MODIFIERS, modifiers_rule});
 
     std::vector<int> paramlist_ = {KW_VOID};
     std::vector<int> paramlist_1 = {NT_PARAMBLOCK, NT_MOREPARAMBLOCK};
@@ -110,16 +106,14 @@ int main(){
         {T_CHAR, paramlist_1},
         {T_FLOAT, paramlist_1},
         {T_INT, paramlist_1},
-        {T_UNTYPE, paramlist_1}
-    };
+        {T_UNTYPE, paramlist_1}};
     tabela.insert({NT_PARAMLIST, paramlist_rule});
 
     std::vector<int> moreparamblock_ = {EMPTY};
     std::vector<int> moreparamblock_1 = {SEMICOLON, NT_PARAMBLOCK, NT_MOREPARAMBLOCK};
     std::unordered_map<int, std::vector<int>> moreparamblock_rule = {
         {ARROW, moreparamblock_},
-        {SEMICOLON, moreparamblock_1}
-    };
+        {SEMICOLON, moreparamblock_1}};
     tabela.insert({NT_MOREPARAMBLOCK, moreparamblock_rule});
 
     std::vector<int> paramblock_ = {NT_TYPE, NT_PARAM, NT_MOREPARAM};
@@ -128,8 +122,7 @@ int main(){
         {T_CHAR, paramblock_},
         {T_FLOAT, paramblock_},
         {T_INT, paramblock_},
-        {T_UNTYPE, paramblock_}
-    };
+        {T_UNTYPE, paramblock_}};
     tabela.insert({NT_PARAMBLOCK, paramblock_rule});
 
     std::vector<int> moreparam_ = {EMPTY};
@@ -137,9 +130,8 @@ int main(){
     std::unordered_map<int, std::vector<int>> moreparam_rule = {
         {ARROW, moreparam_},
         {SEMICOLON, moreparam_},
-        
-        {COLON, moreparam_1}
-    };
+
+        {COLON, moreparam_1}};
     tabela.insert({NT_MOREPARAM, moreparam_rule});
 
     std::vector<int> param_ = {EMPTY};
@@ -149,8 +141,7 @@ int main(){
         {SEMICOLON, param_},
         {COLON, param_},
 
-        {OP_MULTIPLY, param_1}
-    };
+        {OP_MULTIPLY, param_1}};
     tabela.insert({NT_PARAM, param_rule});
 
     std::vector<int> returntype_ = {NT_TYPE, NT_REFERENCE, NT_DIMENSIONBLOCK};
@@ -159,8 +150,7 @@ int main(){
         {T_CHAR, returntype_},
         {T_FLOAT, returntype_},
         {T_INT, returntype_},
-        {T_UNTYPE, returntype_}
-    };
+        {T_UNTYPE, returntype_}};
     tabela.insert({NT_RETURNTYPE, returntype_rule});
 
     std::vector<int> reference_ = {EMPTY};
@@ -170,9 +160,8 @@ int main(){
         {SEMICOLON, reference_},
         {LBRACE, reference_},
         {LBRACKET, reference_},
-        
-        {OP_MULTIPLY, reference_1}
-    };
+
+        {OP_MULTIPLY, reference_1}};
     tabela.insert({NT_REFERENCE, reference_rule});
 
     std::vector<int> dimensionblock_ = {EMPTY};
@@ -183,14 +172,12 @@ int main(){
         {COLON, dimensionblock_},
         {LBRACE, dimensionblock_},
 
-        {LBRACKET, dimensionblock_1}
-    };
+        {LBRACKET, dimensionblock_1}};
     tabela.insert({LBRACKET, dimensionblock_rule});
 
     std::vector<int> block_ = {LBRACE, NT_CODE, RBRACE};
     std::unordered_map<int, std::vector<int>> block_rule = {
-        {LBRACE, block_}
-    };
+        {LBRACE, block_}};
     tabela.insert({NT_BLOCK, block_rule});
 
     std::vector<int> code_ = {EMPTY};
@@ -200,13 +187,13 @@ int main(){
         {RBRACE, code_},
 
         {LBRACE, code_1},
-        
+
         {KW_LABEL, code_2},
         {SEMICOLON, code_2},
         {KW_BREAK, code_2},
         {KW_CONTINUE, code_2},
         {KW_IF, code_2},
-        {GOTO, code_2},
+        {KW_GOTO, code_2},
         {KW_WHILE, code_2},
         {DO, code_2},
         {KW_SWITCH, code_2},
@@ -223,8 +210,7 @@ int main(){
         {T_FLOAT, code_2},
         {T_INT, code_2},
         {T_BOOL, code_2},
-        {T_UNTYPE, code_2}
-    };
+        {T_UNTYPE, code_2}};
     tabela.insert({NT_CODE, code_rule});
 
     std::vector<int> statement_ = {KW_LABEL, IDENTIFIER};
@@ -232,7 +218,7 @@ int main(){
     std::vector<int> statement_2 = {KW_BREAK, SEMICOLON};
     std::vector<int> statement_3 = {KW_CONTINUE, SEMICOLON};
     std::vector<int> statement_4 = {KW_IF, LPAREN, NT_EXPRESSION, RPAREN, NT_BLOCK, NT_elseBLOCK};
-    std::vector<int> statement_5 = {GOTO, IDENTIFIER, SEMICOLON};
+    std::vector<int> statement_5 = {KW_GOTO, IDENTIFIER, SEMICOLON};
     std::vector<int> statement_6 = {KW_WHILE, LPAREN, NT_EXPRESSION, RPAREN, DO, NT_BLOCK};
     std::vector<int> statement_7 = {DO, NT_BLOCK, KW_WHILE, LPAREN, NT_EXPRESSION, RPAREN};
     std::vector<int> statement_8 = {KW_SWITCH, LPAREN, NT_EXPRESSION, RPAREN, LBRACE, NT_SWITCHCASES, KW_DEFAULT, NT_BLOCK, RBRACE};
@@ -243,23 +229,23 @@ int main(){
         {KW_LABEL, statement_},
 
         {SEMICOLON, statement_1},
-        
+
         {KW_BREAK, statement_2},
-        
+
         {KW_CONTINUE, statement_3},
-        
+
         {KW_IF, statement_4},
-        
-        {GOTO, statement_5},
-        
+
+        {KW_GOTO, statement_5},
+
         {KW_WHILE, statement_6},
-        
+
         {DO, statement_7},
-        
+
         {KW_SWITCH, statement_8},
-        
+
         {KW_RETURN, statement_9},
-        
+
         {IDENTIFIER, statement_10},
         {KW_TRUE, statement_10},
         {KW_FALSE, statement_10},
@@ -273,8 +259,7 @@ int main(){
         {T_FLOAT, statement_11},
         {T_INT, statement_11},
         {T_BOOL, statement_11},
-        {T_UNTYPE, statement_11}
-    };
+        {T_UNTYPE, statement_11}};
     tabela.insert({NT_STATEMENT, statement_rule});
 
     std::vector<int> elseBlock_ = {EMPTY};
@@ -287,7 +272,7 @@ int main(){
         {KW_BREAK, elseBlock_},
         {KW_CONTINUE, elseBlock_},
         {KW_IF, elseBlock_},
-        {GOTO, elseBlock_},
+        {KW_GOTO, elseBlock_},
         {KW_WHILE, elseBlock_},
         {DO, elseBlock_},
         {KW_SWITCH, elseBlock_},
@@ -302,16 +287,14 @@ int main(){
         {OP_SUBTRACT, elseBlock_},
         {IDENTIFIER, elseBlock_},
         {LPAREN, elseBlock_},
-        {KW_ELSE, elseBlock_1}
-    };
+        {KW_ELSE, elseBlock_1}};
     tabela.insert({NT_elseBLOCK, elseBlock_rule});
 
     std::vector<int> switchcase_ = {EMPTY};
     std::vector<int> switchcase_1 = {KW_CASE, INT, NT_BLOCK};
     std::unordered_map<int, std::vector<int>> switchcase_rule = {
         {KW_DEFAULT, switchcase_},
-        {KW_CASE, switchcase_1}
-    };
+        {KW_CASE, switchcase_1}};
     tabela.insert({NT_SWITCHCASES, switchcase_rule});
 
     std::vector<int> declarationblock_ = {NT_TYPE, NT_DECLARATION, NT_RESTDECLARATION};
@@ -320,24 +303,21 @@ int main(){
         {T_UNTYPE, declarationblock_},
         {T_CHAR, declarationblock_},
         {T_FLOAT, declarationblock_},
-        {T_INT, declarationblock_}
-    };
+        {T_INT, declarationblock_}};
     tabela.insert({NT_DECLARATIONBLOCK, declarationblock_rule});
 
     std::vector<int> restdeclaration_ = {EMPTY};
     std::vector<int> restdeclaration_1 = {COLON, NT_DECLARATION, NT_RESTDECLARATION};
     std::unordered_map<int, std::vector<int>> restdeclaration_rule = {
         {EOI, restdeclaration_},
-        {COLON, restdeclaration_1}
-    };
+        {COLON, restdeclaration_1}};
     tabela.insert({NT_RESTDECLARATION, restdeclaration_rule});
 
     std::vector<int> declaration_ = {NT_REFERENCE, IDENTIFIER, NT_INDEXBLOCK, NT_INITIALIZER};
     std::unordered_map<int, std::vector<int>> declaration_rule = {
         {SEMICOLON, declaration_},
         {COLON, declaration_},
-        {OP_MULTIPLY, declaration_}
-    };
+        {OP_MULTIPLY, declaration_}};
     tabela.insert({NT_DECLARATION, declaration_rule});
 
     std::vector<int> indexblock_ = {EMPTY};
@@ -346,8 +326,7 @@ int main(){
         {SEMICOLON, indexblock_},
         {COLON, indexblock_},
         {OP_EQUAL, indexblock_},
-        {LBRACKET, indexblock_1}
-    };
+        {LBRACKET, indexblock_1}};
     tabela.insert({NT_INDEXBLOCK, indexblock_rule});
 
     std::vector<int> initializer_ = {EMPTY};
@@ -355,10 +334,8 @@ int main(){
     std::unordered_map<int, std::vector<int>> initializer_rule = {
         {SEMICOLON, initializer_},
         {COLON, initializer_},
-        {OP_EQUAL, initializer_1}
-    };
+        {OP_EQUAL, initializer_1}};
     tabela.insert({NT_INITIALIZER, initializer_rule});
-
 
     std::vector<int> expression_ = {NT_LOGICALOR, NT_RESTEXPRESSION};
     std::unordered_map<int, std::vector<int>> expression_rule = {
@@ -369,8 +346,7 @@ int main(){
         {KW_FLOAT, expression_},
         {KW_INT, expression_},
         {KW_UNTYPED, expression_},
-        {LPAREN, expression_}
-    };
+        {LPAREN, expression_}};
     tabela.insert({NT_EXPRESSION, expression_rule});
 
     std::vector<int> restexpression_ = {EMPTY};
@@ -395,8 +371,7 @@ int main(){
         {OP_MULTIPLY, restexpression_},
         {OP_DIVIDE, restexpression_},
         {OP_MODULUS, restexpression_},
-        {OP_EQUAL, restexpression_1}
-    };
+        {OP_EQUAL, restexpression_1}};
     tabela.insert({NT_RESTEXPRESSION, restexpression_rule});
 
     std::vector<int> logicalor_ = {NT_LOGICALAND, NT_RESTLOGICALOR};
@@ -408,8 +383,7 @@ int main(){
         {KW_FLOAT, logicalor_},
         {KW_INT, logicalor_},
         {KW_UNTYPED, logicalor_},
-        {LPAREN, logicalor_}
-    };
+        {LPAREN, logicalor_}};
     tabela.insert({NT_LOGICALOR, logicalor_rule});
 
     std::vector<int> restlogicalor_ = {EMPTY};
@@ -434,8 +408,7 @@ int main(){
         {OP_MULTIPLY, restlogicalor_},
         {OP_DIVIDE, restlogicalor_},
         {OP_MODULUS, restlogicalor_},
-        {OP_BITWISE_OR, restlogicalor_1}
-    };
+        {OP_BITWISE_OR, restlogicalor_1}};
     tabela.insert({NT_RESTLOGICALOR, restlogicalor_rule});
 
     std::vector<int> logicaland_ = {NT_BITWISEOR, NT_RESTLOGICALAND};
@@ -447,8 +420,7 @@ int main(){
         {KW_FLOAT, logicaland_},
         {KW_INT, logicaland_},
         {KW_UNTYPED, logicaland_},
-        {LPAREN, logicaland_}
-    };
+        {LPAREN, logicaland_}};
     tabela.insert({NT_LOGICALAND, logicaland_rule});
 
     std::vector<int> restlogicaland_ = {EMPTY};
@@ -473,8 +445,7 @@ int main(){
         {OP_MULTIPLY, restlogicaland_},
         {OP_DIVIDE, restlogicaland_},
         {OP_MODULUS, restlogicaland_},
-        {OP_BITWISE_AND, restlogicaland_1}
-    };
+        {OP_BITWISE_AND, restlogicaland_1}};
     tabela.insert({NT_RESTLOGICALAND, restlogicaland_rule});
 
     std::vector<int> bitwiseor_ = {NT_BITWISEXOR, NT_RESTBITWISEOR};
@@ -486,8 +457,7 @@ int main(){
         {KW_FLOAT, bitwiseor_},
         {KW_INT, bitwiseor_},
         {KW_UNTYPED, bitwiseor_},
-        {LPAREN, bitwiseor_}
-    };
+        {LPAREN, bitwiseor_}};
     tabela.insert({NT_BITWISEOR, bitwiseor_rule});
 
     std::vector<int> restbitwiseor_ = {EMPTY};
@@ -512,8 +482,7 @@ int main(){
         {OP_MULTIPLY, restbitwiseor_},
         {OP_DIVIDE, restbitwiseor_},
         {OP_MODULUS, restbitwiseor_},
-        {OP_BITWISE_OR, restbitwiseor_1}
-    };
+        {OP_BITWISE_OR, restbitwiseor_1}};
     tabela.insert({NT_RESTBITWISEOR, restbitwiseor_rule});
 
     std::vector<int> bitwisexor_ = {NT_BITWISEAND, NT_RESTBITWISEXOR};
@@ -525,8 +494,7 @@ int main(){
         {KW_FLOAT, bitwisexor_},
         {KW_INT, bitwisexor_},
         {KW_UNTYPED, bitwisexor_},
-        {LPAREN, bitwisexor_}
-    };
+        {LPAREN, bitwisexor_}};
     tabela.insert({NT_BITWISEXOR, bitwisexor_rule});
 
     std::vector<int> restbitwisexor_ = {EMPTY};
@@ -551,8 +519,7 @@ int main(){
         {OP_MULTIPLY, restbitwisexor_},
         {OP_DIVIDE, restbitwisexor_},
         {OP_MODULUS, restbitwisexor_},
-        {OP_BITWISE_XOR, restbitwisexor_1}
-    };
+        {OP_BITWISE_XOR, restbitwisexor_1}};
     tabela.insert({NT_RESTBITWISEXOR, restbitwisexor_rule});
 
     std::vector<int> bitwiseand_ = {NT_EQUALITY, NT_RESTBITWISEAND};
@@ -564,8 +531,7 @@ int main(){
         {KW_FLOAT, bitwiseand_},
         {KW_INT, bitwiseand_},
         {KW_UNTYPED, bitwiseand_},
-        {LPAREN, bitwiseand_}
-    };
+        {LPAREN, bitwiseand_}};
     tabela.insert({NT_BITWISEAND, bitwiseand_rule});
 
     std::vector<int> restbitwiseand_ = {EMPTY};
@@ -590,8 +556,7 @@ int main(){
         {OP_MULTIPLY, restbitwiseand_},
         {OP_DIVIDE, restbitwiseand_},
         {OP_MODULUS, restbitwiseand_},
-        {OP_BITWISE_AND, restbitwiseand_1}
-    };
+        {OP_BITWISE_AND, restbitwiseand_1}};
     tabela.insert({NT_RESTBITWISEAND, restbitwiseand_rule});
 
     std::vector<int> equality_ = {NT_RELATION, NT_RESTEQUALITY};
@@ -603,8 +568,7 @@ int main(){
         {KW_FLOAT, equality_},
         {KW_INT, equality_},
         {KW_UNTYPED, equality_},
-        {LPAREN, equality_}
-    };
+        {LPAREN, equality_}};
     tabela.insert({NT_EQUALITY, equality_rule});
 
     std::vector<int> restequality_ = {EMPTY};
@@ -630,16 +594,14 @@ int main(){
         {OP_DIVIDE, restequality_},
         {OP_MODULUS, restequality_},
         {OP_EQUAL, restequality_1},
-        {OP_NOTEQUAL, restequality_1}
-    };
+        {OP_NOTEQUAL, restequality_1}};
     tabela.insert({NT_RESTEQUALITY, restequality_rule});
 
     std::vector<int> equalityoperator_ = {OP_EQUAL};
     std::vector<int> equalityoperator_1 = {OP_NOTEQUAL};
     std::unordered_map<int, std::vector<int>> equalityoperator_rule = {
         {OP_EQUAL, equalityoperator_},
-        {OP_NOTEQUAL, equalityoperator_1}
-    };
+        {OP_NOTEQUAL, equalityoperator_1}};
     tabela.insert({NT_EQUALITYOPERATOR, equalityoperator_rule});
 
     std::vector<int> relation_ = {NT_SHIFT, NT_SHIFT};
@@ -651,8 +613,7 @@ int main(){
         {KW_FLOAT, relation_},
         {KW_INT, relation_},
         {KW_UNTYPED, relation_},
-        {LPAREN, relation_}
-    };
+        {LPAREN, relation_}};
     tabela.insert({NT_RELATION, relation_rule});
 
     std::vector<int> restrelation_ = {EMPTY};
@@ -680,8 +641,7 @@ int main(){
         {OP_LESS, restrelation_1},
         {OP_LESSEQUAL, restrelation_1},
         {OP_GREATER, restrelation_1},
-        {OP_GREATEREQUAL, restrelation_1}
-    };
+        {OP_GREATEREQUAL, restrelation_1}};
     tabela.insert({NT_RESTRELATION, restrelation_rule});
 
     std::vector<int> relationoperator_ = {OP_LESS};
@@ -692,10 +652,8 @@ int main(){
         {OP_LESS, relationoperator_},
         {OP_LESSEQUAL, relationoperator_1},
         {OP_GREATER, relationoperator_2},
-        {OP_GREATEREQUAL, relationoperator_3}
-    };
+        {OP_GREATEREQUAL, relationoperator_3}};
     tabela.insert({NT_RELATIONOPERATOR, relationoperator_rule});
-
 
     std::vector<int> shift_ = {NT_ADDITION, NT_RESTSHIFT};
     std::unordered_map<int, std::vector<int>> shift_rule = {
@@ -706,10 +664,8 @@ int main(){
         {KW_FLOAT, shift_},
         {KW_INT, shift_},
         {KW_UNTYPED, shift_},
-        {LPAREN, shift_}
-    };
+        {LPAREN, shift_}};
     tabela.insert({NT_SHIFT, shift_rule});
-
 
     std::vector<int> restshift_ = {EMPTY};
     std::vector<int> restshift_1 = {NT_SHIFTOPERATOR, NT_ADDITION, NT_RESTSHIFT};
@@ -734,19 +690,15 @@ int main(){
         {OP_DIVIDE, restshift_},
         {OP_MODULUS, restshift_},
         {OP_BITWISE_LSHIFT, restshift_1},
-        {OP_BITWISE_RSHIFT, restshift_1}
-    };
+        {OP_BITWISE_RSHIFT, restshift_1}};
     tabela.insert({NT_RESTSHIFT, restshift_rule});
-
 
     std::vector<int> shiftoperator_ = {OP_BITWISE_LSHIFT};
     std::vector<int> shiftoperator_1 = {OP_BITWISE_RSHIFT};
     std::unordered_map<int, std::vector<int>> shiftoperator_rule = {
         {OP_BITWISE_LSHIFT, shiftoperator_},
-        {OP_BITWISE_RSHIFT, shiftoperator_1}
-    };
+        {OP_BITWISE_RSHIFT, shiftoperator_1}};
     tabela.insert({NT_SHIFTOPERATOR, shiftoperator_rule});
-
 
     std::vector<int> addition_ = {NT_MULTIPLICATION, NT_RESTADDITION};
     std::unordered_map<int, std::vector<int>> addition_rule = {
@@ -757,10 +709,8 @@ int main(){
         {KW_FLOAT, addition_},
         {KW_INT, addition_},
         {KW_UNTYPED, addition_},
-        {LPAREN, addition_}
-    };
+        {LPAREN, addition_}};
     tabela.insert({NT_ADDITION, addition_rule});
-
 
     std::vector<int> restaddition_ = {EMPTY};
     std::vector<int> restaddition_1 = {NT_ADDITIONOPERATOR, NT_MULTIPLICATION, NT_RESTADDITION};
@@ -785,19 +735,15 @@ int main(){
         {OP_DIVIDE, restaddition_},
         {OP_MODULUS, restaddition_},
         {OP_ADD, restaddition_1},
-        {OP_SUBTRACT, restaddition_1}
-    };
+        {OP_SUBTRACT, restaddition_1}};
     tabela.insert({NT_RESTADDITION, restaddition_rule});
-
 
     std::vector<int> additionoperator_ = {OP_ADD};
     std::vector<int> additionoperator_1 = {OP_SUBTRACT};
     std::unordered_map<int, std::vector<int>> additionoperator_rule = {
         {OP_ADD, additionoperator_},
-        {OP_SUBTRACT, additionoperator_1}
-    };
+        {OP_SUBTRACT, additionoperator_1}};
     tabela.insert({NT_ADDITIONOPERATOR, additionoperator_rule});
-
 
     std::vector<int> multiplication_ = {NT_UNARY3, NT_RESTMULTIPLICATION};
     std::unordered_map<int, std::vector<int>> multiplication_rule = {
@@ -808,10 +754,8 @@ int main(){
         {KW_FLOAT, multiplication_},
         {KW_INT, multiplication_},
         {KW_UNTYPED, multiplication_},
-        {LPAREN, multiplication_}
-    };
+        {LPAREN, multiplication_}};
     tabela.insert({NT_MULTIPLICATION, multiplication_rule});
-
 
     std::vector<int> restmultiplication_ = {EMPTY};
     std::vector<int> restmultiplication_1 = {NT_MULTIPLICATIONOPERATOR, NT_UNARY3, NT_RESTMULTIPLICATION};
@@ -837,10 +781,8 @@ int main(){
         {OP_MODULUS, restmultiplication_},
         {OP_MULTIPLY, restmultiplication_1},
         {OP_DIVIDE, restmultiplication_1},
-        {OP_MODULUS, restmultiplication_1}
-    };
+        {OP_MODULUS, restmultiplication_1}};
     tabela.insert({NT_RESTMULTIPLICATION, restmultiplication_rule});
-
 
     std::vector<int> multiplicationoperator_ = {OP_MULTIPLY};
     std::vector<int> multiplicationoperator_1 = {OP_DIVIDE};
@@ -848,10 +790,8 @@ int main(){
     std::unordered_map<int, std::vector<int>> multiplicationoperator_rule = {
         {OP_MULTIPLY, multiplicationoperator_},
         {OP_DIVIDE, multiplicationoperator_1},
-        {OP_MODULUS, multiplicationoperator_2}
-    };
+        {OP_MODULUS, multiplicationoperator_2}};
     tabela.insert({NT_RELATIONOPERATOR, multiplicationoperator_rule});
-
 
     std::vector<int> unary3_ = {NT_UNARY2};
     std::vector<int> unary3_1 = {NT_UNARY3OPERATOR, NT_UNARY2};
@@ -866,10 +806,8 @@ int main(){
         {LPAREN, unary3_},
         {OP_BITWISE_AND, unary3_1},
         {OP_MULTIPLY, unary3_1},
-        {OP_SUBTRACT, unary3_1}
-    };
+        {OP_SUBTRACT, unary3_1}};
     tabela.insert({NT_UNARY3, unary3_rule});
-
 
     std::vector<int> unary3operator_ = {OP_BITWISE_AND};
     std::vector<int> unary3operator_1 = {OP_MULTIPLY};
@@ -877,10 +815,8 @@ int main(){
     std::unordered_map<int, std::vector<int>> unary3operator_rule = {
         {OP_BITWISE_AND, unary3operator_},
         {OP_MULTIPLY, unary3operator_1},
-        {OP_SUBTRACT, unary3operator_2}
-    };
+        {OP_SUBTRACT, unary3operator_2}};
     tabela.insert({NT_UNARY3OPERATOR, unary3operator_rule});
-
 
     std::vector<int> unary2_ = {NT_FACTOR};
     std::vector<int> unary2_1 = {NT_UNARY2OPERATOR, NT_FACTOR};
@@ -895,10 +831,8 @@ int main(){
         {LPAREN, unary2_},
         {OP_ADD, unary2_1},
         {OP_SUBTRACT, unary2_1},
-        {OP_NOT, unary2_1}
-    };
+        {OP_NOT, unary2_1}};
     tabela.insert({NT_UNARY2, unary2_rule});
-
 
     std::vector<int> unary2operator_ = {OP_ADD};
     std::vector<int> unary2operator_1 = {OP_SUBTRACT};
@@ -906,10 +840,8 @@ int main(){
     std::unordered_map<int, std::vector<int>> unary2operator_rule = {
         {OP_ADD, unary2operator_},
         {OP_SUBTRACT, unary2operator_1},
-        {OP_NOT, unary2operator_2}
-    };
+        {OP_NOT, unary2operator_2}};
     tabela.insert({NT_UNARY2OPERATOR, unary2operator_rule});
-
 
     std::vector<int> factor_ = {IDENTIFIER, NT_APPLICATION};
     std::vector<int> factor_1 = {NT_IMMEDIATE};
@@ -922,10 +854,8 @@ int main(){
         {FLOAT, factor_1},
         {INT, factor_1},
         {T_UNTYPE, factor_1},
-        {LPAREN, factor_2}
-    };
+        {LPAREN, factor_2}};
     tabela.insert({NT_FACTOR, factor_rule});
-
 
     std::vector<int> application_ = {EMPTY};
     std::vector<int> application_1 = {LBRACKET, NT_EXPRESSION, RBRACKET, NT_APPLICATION};
@@ -952,19 +882,15 @@ int main(){
         {OP_MODULUS, application_},
         {RBRACKET, application_},
         {LBRACKET, application_1},
-        {LPAREN, application_2}
-    };
+        {LPAREN, application_2}};
     tabela.insert({NT_APPLICATION, application_rule});
-
 
     std::vector<int> moreexpression_ = {EMPTY};
     std::vector<int> moreexpression_1 = {COLON, NT_EXPRESSION, NT_MOREEXPRESSION};
     std::unordered_map<int, std::vector<int>> moreexpression_rule = {
         {RPAREN, moreexpression_},
-        {COLON, moreexpression_1}
-    };
+        {COLON, moreexpression_1}};
     tabela.insert({NT_MOREEXPRESSION, moreexpression_rule});
-
 
     std::vector<int> type_ = {KW_BOOL};
     std::vector<int> type_1 = {KW_CHAR};
@@ -973,13 +899,11 @@ int main(){
     std::vector<int> type_4 = {KW_UNTYPED};
     std::unordered_map<int, std::vector<int>> type_rule = {
         {KW_BOOL, type_},
-        {KW_CHAR , type_1},
-        {KW_FLOAT , type_2},
-        {KW_INT , type_3},
-        {KW_UNTYPED , type_4}
-    };
+        {KW_CHAR, type_1},
+        {KW_FLOAT, type_2},
+        {KW_INT, type_3},
+        {KW_UNTYPED, type_4}};
     tabela.insert({NT_TYPE, type_rule});
-
 
     std::vector<int> immediate_ = {TRUE};
     std::vector<int> immediate_1 = {FALSE};
@@ -993,8 +917,7 @@ int main(){
         {CHAR, immediate_2},
         {FLOAT, immediate_3},
         {INT, immediate_4},
-        {STRING, immediate_5}
-    };
+        {STRING, immediate_5}};
     tabela.insert({NT_IMMEDIATE, immediate_rule});
 
     std::stack<int> order;
@@ -1004,24 +927,49 @@ int main(){
 
     order.push(next);
 
-    while(!order.empty()){
+    std::cout << "Passou - " << next << "\n";
+
+    while (!order.empty() and next != EOI)
+    {
 
         int top = order.top();
 
-        if(top > 349){
-            if(top == next){
-                order.pop();
-                next = yylex();
-            } else{
-                std::cout << "TERMINAL NÃO RECONHECIDO\n";
-                break;
+            // se o topo da pilha for um terminal
+            if (top >= 300 && top < 500)
+            {
+                // se casa com a entrada
+                if (top == next)
+                {
+                    // desempilha
+                    order.pop();
+                    // avanca
+                    next = yylex();
+                    order.push(next);
+                }
+                else
+                {
+                    // caso contrario erro
+                    std::cout << "TERMINAL NÃO RECONHECIDO\n";
+                    break;
+                }
             }
-        } else{
-            
-        }
+            else
+            {
+                // troca o topo da pilha pela lista em tabela(top(), entrada)
+                auto linha_ = tabela.at(top);
+                auto coluna_ = linha_.at(next);
+                int sz_col = sizeof(coluna_) / sizeof(coluna_[0]);
+                // lendo de trás para frente
+                for (int i = sz_col - 1; i >= 0; i--)
+                {
+                    // adicionando a fila
+                    order.push(coluna_[i]);
+                }
+            }
+    
 
+        std::cout << "Passou - " << next << "\n";
     }
-
 
     return 0;
 }
