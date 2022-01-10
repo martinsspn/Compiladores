@@ -1034,7 +1034,8 @@ int code_parser( int &next, int &error)
         case RBRACE:
             return 0;
         default:
-            printf("isso ai mesmo, tu perdeu man\n");
+            printf("at line:%d, col:%d unexpected char %d\n"
+                ,yylineno, col, next);
     }
 
     return 0;
