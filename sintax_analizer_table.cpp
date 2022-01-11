@@ -224,12 +224,13 @@ int main()
     std::vector<int> statement_6 = {KW_WHILE, LPAREN, NT_EXPRESSION, RPAREN, DO, NT_BLOCK};
     std::vector<int> statement_7 = {DO, NT_BLOCK, KW_WHILE, LPAREN, NT_EXPRESSION, RPAREN};
     std::vector<int> statement_8 = {KW_SWITCH, LPAREN, NT_EXPRESSION, RPAREN, LBRACE, NT_SWITCHCASES, KW_DEFAULT, NT_BLOCK, RBRACE};
+    std::vector<int> statement_01 = {NT_ADDITIONOPERATOR, NT_ADDITIONOPERATOR, IDENTIFIER, SEMICOLON};
     std::vector<int> statement_9 = {KW_RETURN, NT_EXPRESSION};
     std::vector<int> statement_10 = {NT_EXPRESSION, SEMICOLON};
     std::vector<int> statement_11 = {NT_DECLARATIONBLOCK, SEMICOLON};
     std::unordered_map<int, std::vector<int>> statement_rule = {
         {KW_LABEL, statement_},
-
+        {OP_ADD, statement_01},
         {SEMICOLON, statement_1},
 
         {KW_BREAK, statement_2},
@@ -329,7 +330,7 @@ int main()
 
     std::vector<int> indexblock_ = {EMPTY};
     std::vector<int> indexblock_1 = {LBRACKET, NT_INDEXBLOCKTYPES, RBRACKET, NT_INDEXBLOCK};
-    std::vector<int> indexblock_2 = {LPAREN, IDENTIFIER, NT_INDEXBLOCKTXT};
+    std::vector<int> indexblock_2 = {LPAREN, NT_EXPRESSION, NT_INDEXBLOCKTXT};
     std::unordered_map<int, std::vector<int>> indexblock_rule = {
         {SEMICOLON, indexblock_},
         {COLON, indexblock_},
@@ -340,13 +341,12 @@ int main()
     tabela.insert({NT_INDEXBLOCK, indexblock_rule});
 
     std::vector<int> indexblocktxt_ = {RPAREN};
-    std::vector<int> indexblocktxt_1 = {COMMA, IDENTIFIER, NT_INDEXBLOCKTXT};
+    std::vector<int> indexblocktxt_1 = {COMMA, NT_EXPRESSION, NT_INDEXBLOCKTXT};
     std::unordered_map<int, std::vector<int>> indexblocktxt_rule = {
         {RPAREN, indexblocktxt_},
         {COMMA, indexblocktxt_1}
     };
     tabela.insert({NT_INDEXBLOCKTXT, indexblocktxt_rule});
-
 
     std::vector<int> indexblocktypes_ = {INT};
     std::vector<int> indexblocktypes_1 = {NT_EXPRESSION, };
@@ -389,6 +389,7 @@ int main()
         {RPAREN, restexpression_},
         {SEMICOLON, restexpression_},
         {COLON, restexpression_},
+        {COMMA, restexpression_},
         {RBRACKET, restexpression_},
         {OP_BITWISE_OR, restexpression_},
         {OP_BITWISE_AND, restexpression_},
@@ -433,6 +434,7 @@ int main()
         {RPAREN, restlogicalor_},
         {SEMICOLON, restlogicalor_},
         {COLON, restlogicalor_},
+        {COMMA, restlogicalor_},
         {RBRACKET, restlogicalor_},
         {OP_BITWISE_OR, restlogicalor_},
         {OP_BITWISE_AND, restlogicalor_},
@@ -478,6 +480,7 @@ int main()
         {RPAREN, restlogicaland_},
         {SEMICOLON, restlogicaland_},
         {COLON, restlogicaland_},
+        {COMMA, restlogicaland_},
         {RBRACKET, restlogicaland_},
         {OP_BITWISE_OR, restlogicaland_},
         {OP_BITWISE_AND, restlogicaland_1},
@@ -524,6 +527,7 @@ int main()
         {RPAREN, restbitwiseor_},
         {SEMICOLON, restbitwiseor_},
         {COLON, restbitwiseor_},
+        {COMMA, restbitwiseor_},
         {RBRACKET, restbitwiseor_},
         {OP_BITWISE_OR, restbitwiseor_},
         {OP_LOGICAL_AND, restbitwiseor_},
@@ -569,6 +573,7 @@ int main()
         {RPAREN, restbitwisexor_},
         {SEMICOLON, restbitwisexor_},
         {COLON, restbitwisexor_},
+        {COMMA, restbitwisexor_},
         {RBRACKET, restbitwisexor_},
         {OP_BITWISE_OR, restbitwisexor_},
         {OP_BITWISE_AND, restbitwisexor_},
@@ -614,6 +619,7 @@ int main()
         {RPAREN, restbitwiseand_},
         {SEMICOLON, restbitwiseand_},
         {COLON, restbitwiseand_},
+        {COMMA, restbitwiseand_},
         {RBRACKET, restbitwiseand_},
         {OP_BITWISE_OR, restbitwiseand_},
         {OP_LOGICAL_AND, restbitwiseand_},
@@ -659,6 +665,7 @@ int main()
         {RPAREN, restequality_},
         {SEMICOLON, restequality_},
         {COLON, restequality_},
+        {COMMA, restequality_},
         {RBRACKET, restequality_},
         {OP_BITWISE_OR, restequality_},
         {OP_LOGICAL_AND, restequality_},
@@ -709,6 +716,7 @@ int main()
     std::vector<int> restrelation_1 = {NT_RELATIONOPERATOR, NT_SHIFT, NT_RESTRELATION};
     std::unordered_map<int, std::vector<int>> restrelation_rule = {
         {RPAREN, restrelation_},
+        {COMMA, restrelation_},
         {SEMICOLON, restrelation_},
         {COLON, restrelation_},
         {RBRACKET, restrelation_},
@@ -771,6 +779,7 @@ int main()
     std::unordered_map<int, std::vector<int>> restshift_rule = {
         {RPAREN, restshift_},
         {SEMICOLON, restshift_},
+        {COMMA, restshift_},
         {COLON, restshift_},
         {RBRACKET, restshift_},
         {OP_BITWISE_OR, restshift_},
@@ -825,6 +834,7 @@ int main()
     std::unordered_map<int, std::vector<int>> restaddition_rule = {
         {RPAREN, restaddition_},
         {SEMICOLON, restaddition_},
+        {COMMA, restaddition_},
         {COLON, restaddition_},
         {RBRACKET, restaddition_},
         {OP_BITWISE_OR, restaddition_},
@@ -878,6 +888,7 @@ int main()
     std::vector<int> restmultiplication_1 = {NT_MULTIPLICATIONOPERATOR, NT_UNARY3, NT_RESTMULTIPLICATION};
     std::unordered_map<int, std::vector<int>> restmultiplication_rule = {
         {RPAREN, restmultiplication_},
+        {COMMA, restmultiplication_},
         {SEMICOLON, restmultiplication_},
         {COLON, restmultiplication_},
         {RBRACKET, restmultiplication_},
@@ -1011,6 +1022,7 @@ int main()
         {RPAREN, application_},
         {SEMICOLON, application_},
         {COLON, application_},
+        {COMMA, application_},
         {RBRACKET, application_},
         {OP_ASSIGN, application_},
         {OP_BITWISE_OR, application_},
@@ -1036,8 +1048,10 @@ int main()
 
     std::vector<int> moreexpression_ = {EMPTY};
     std::vector<int> moreexpression_1 = {COLON, NT_EXPRESSION, NT_MOREEXPRESSION};
+    std::vector<int> moreexpression_2 = {COMMA, NT_EXPRESSION, NT_MOREEXPRESSION};
     std::unordered_map<int, std::vector<int>> moreexpression_rule = {
         {RPAREN, moreexpression_},
+        {COMMA, moreexpression_2},
         {COLON, moreexpression_1}};
     tabela.insert({NT_MOREEXPRESSION, moreexpression_rule});
 
@@ -1084,17 +1098,15 @@ int main()
     int next = yylex();
     int error = 0;
 
+    std::cout << "INICIANDO ANALISE!\n";
+
     auto lin_ = tabela.at(NT_MODULE);
     auto col_ = lin_.at(KW_MODULE);
     size_t sz = col_.size();
-    std::cout << "sz = " << sz << "\n";
 
     for(int i = sz-1; i >= 0 ; i--){
         order.push(col_[i]);
-        std::cout << col_[i] << std::endl;
     }
-
-    std::cout << "Passou - " << next << "\n";
 
     while (!order.empty() and next != EOI)
     {
@@ -1117,16 +1129,14 @@ int main()
                 }
                 else
                 {
-                    std::cout << top << " !================ " << next << "\n";
 
                     // caso contrario erro
-                    std::cout << "TERMINAL NÃO RECONHECIDO\n";
+                    std::cout << top << " não reconhecido\n";
                     break;
                 }
             }
             else
             {
-                std::cout << "Analisando - Top = " << top << " - Next = " << next << "\n";
 
                 // troca o topo da pilha pela lista em tabela(top(), entrada)
                 auto linha_ = tabela.at(top);
@@ -1145,8 +1155,9 @@ int main()
         } else{
             order.pop();
         }
-        std::cout << "Passou - " << next << " - TOP = " << top << "\n";
     }
+
+    std::cout << "ANALISE FINALIZADA!\n";
 
     return 0;
 }
