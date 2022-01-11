@@ -66,15 +66,9 @@
 #define STRING                   364
 #define IDENTIFIER               365
 #define DO                       366
-#define EMPTY                    368
+#define EMPTY                    570
 #define ERROR                    606
 #define EOI                      0
-
-#define T_BOOL                  200
-#define T_CHAR                  201
-#define T_FLOAT                 202
-#define T_INT                   203
-#define T_UNTYPE                204
 
 
 #define NT_MODULE               500
@@ -138,7 +132,7 @@
 #define NT_APPLICATION          561
 #define NT_IMMEDIATE            562
 #define NT_MOREEXPRESSION       563
-
+#define NT_INDEXBLOCKTYPES      564
 
 int yylex();
 #endif
