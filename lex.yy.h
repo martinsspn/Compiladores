@@ -135,6 +135,7 @@
 #define NT_MOREEXPRESSION       563
 #define NT_INDEXBLOCKTYPES      564
 #define NT_FACTORCOND           565
+#define NT_INDEXBLOCKTXT        566
 
 int yylex();
 #endif
