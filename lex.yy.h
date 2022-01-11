@@ -41,6 +41,7 @@
 #define OP_GREATER               337
 #define OP_GREATEREQUAL          338
 #define OP_EQUAL                 339
+#define OP_EQUALEQUAL            367
 #define OP_NOTEQUAL              341
 #define OP_LOGICAL_OR            342
 #define OP_NOT                   343
@@ -133,6 +134,7 @@
 #define NT_IMMEDIATE            562
 #define NT_MOREEXPRESSION       563
 #define NT_INDEXBLOCKTYPES      564
+#define NT_FACTORCOND           565
 
 int yylex();
 #endif

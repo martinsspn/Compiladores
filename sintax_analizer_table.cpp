@@ -885,12 +885,10 @@ int main()
         {OP_BITWISE_RSHIFT, restmultiplication_},
         {OP_ADD, restmultiplication_},
         {OP_SUBTRACT, restmultiplication_},
-        {OP_MULTIPLY, restmultiplication_},
-        {OP_DIVIDE, restmultiplication_},
-        {OP_MODULUS, restmultiplication_},
         {OP_MULTIPLY, restmultiplication_1},
         {OP_DIVIDE, restmultiplication_1},
         {OP_MODULUS, restmultiplication_1},
+        {OP_DIVIDE, restmultiplication_1},
         {OP_ASSIGN, restmultiplication_}};
     tabela.insert({NT_RESTMULTIPLICATION, restmultiplication_rule});
 
@@ -901,7 +899,7 @@ int main()
         {OP_MULTIPLY, multiplicationoperator_},
         {OP_DIVIDE, multiplicationoperator_1},
         {OP_MODULUS, multiplicationoperator_2}};
-    tabela.insert({NT_RELATIONOPERATOR, multiplicationoperator_rule});
+    tabela.insert({NT_MULTIPLICATIONOPERATOR, multiplicationoperator_rule});
 
     std::vector<int> unary3_ = {NT_UNARY2};
     std::vector<int> unary3_1 = {NT_UNARY3OPERATOR, NT_UNARY2};
@@ -968,7 +966,7 @@ int main()
     std::vector<int> factor_ = {IDENTIFIER, NT_APPLICATION};
     std::vector<int> factor_1 = {NT_IMMEDIATE};
     std::vector<int> factor_2 = {LPAREN, NT_EXPRESSION, RPAREN};
-    std::vector<int> factor_3 = {NT_TYPE, IDENTIFIER, NT_APPLICATION};
+    std::vector<int> factor_3 = {NT_TYPE, NT_FACTORCOND};
     std::unordered_map<int, std::vector<int>> factor_rule = {
         {IDENTIFIER, factor_},
         {KW_TRUE, factor_3},
@@ -985,6 +983,16 @@ int main()
         {FALSE, factor_1},
         {SEMICOLON, factor_1}};
     tabela.insert({NT_FACTOR, factor_rule});
+
+    std::vector<int> factorcond_ = {EMPTY};
+    std::vector<int> factorcond_1 = {IDENTIFIER, NT_APPLICATION, SEMICOLON};
+    std::unordered_map<int, std::vector<int>> factorcond__rule = {
+        {KW_FALSE, factorcond_},
+        {SEMICOLON, factorcond_},
+        {KW_TRUE, factorcond_},
+        {IDENTIFIER, factorcond_1}
+    };
+    tabela.insert({NT_FACTORCOND, factorcond__rule});
 
     std::vector<int> application_ = {EMPTY};
     std::vector<int> application_1 = {LBRACKET, NT_EXPRESSION, RBRACKET, NT_APPLICATION};
@@ -1030,8 +1038,12 @@ int main()
     std::vector<int> type_3 = {KW_INT};
     std::vector<int> type_4 = {KW_UNTYPED};
     std::vector<int> type_5 = {KW_VOID};
+    std::vector<int> type_6 = {KW_TRUE};
+    std::vector<int> type_7 = {KW_FALSE};
     std::unordered_map<int, std::vector<int>> type_rule = {
         {KW_BOOL, type_},
+        {KW_TRUE, type_6},
+        {KW_FALSE, type_7},
         {KW_CHAR, type_1},
         {KW_FLOAT, type_2},
         {KW_INT, type_3},
