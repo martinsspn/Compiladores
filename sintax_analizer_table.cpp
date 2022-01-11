@@ -135,12 +135,12 @@ int main()
         {COLON, moreparam_1}};
     tabela.insert({NT_MOREPARAM, moreparam_rule});
 
-    std::vector<int> param_ = {EMPTY};
+    // std::vector<int> param_ = {EMPTY};
     std::vector<int> param_1 = {NT_REFERENCE, IDENTIFIER, NT_DIMENSIONBLOCK};
     std::unordered_map<int, std::vector<int>> param_rule = {
-        {ARROW, param_},
-        {SEMICOLON, param_},
-        {COLON, param_},
+        {ARROW, param_1},
+        {SEMICOLON, param_1},
+        {COLON, param_1},
         {IDENTIFIER, param_1},
         {OP_MULTIPLY, param_1}};
     tabela.insert({NT_PARAM, param_rule});
@@ -295,7 +295,7 @@ int main()
     tabela.insert({NT_elseBLOCK, elseBlock_rule});
 
     std::vector<int> switchcase_ = {EMPTY};
-    std::vector<int> switchcase_1 = {KW_CASE, INT, NT_BLOCK};
+    std::vector<int> switchcase_1 = {KW_CASE, INT, NT_BLOCK, NT_SWITCHCASES};
     std::unordered_map<int, std::vector<int>> switchcase_rule = {
         {KW_DEFAULT, switchcase_},
         {KW_CASE, switchcase_1}};
@@ -349,7 +349,7 @@ int main()
     tabela.insert({NT_INDEXBLOCKTXT, indexblocktxt_rule});
 
     std::vector<int> indexblocktypes_ = {INT};
-    std::vector<int> indexblocktypes_1 = {NT_EXPRESSION, };
+    std::vector<int> indexblocktypes_1 = {NT_EXPRESSION};
     std::unordered_map<int, std::vector<int>> indexblocktypes_rules = {
         {INT, indexblocktypes_},
         {IDENTIFIER, indexblocktypes_1}
@@ -1006,7 +1006,7 @@ int main()
     tabela.insert({NT_FACTOR, factor_rule});
 
     std::vector<int> factorcond_ = {EMPTY};
-    std::vector<int> factorcond_1 = {IDENTIFIER, NT_APPLICATION, SEMICOLON};
+    std::vector<int> factorcond_1 = {IDENTIFIER, NT_APPLICATION};
     std::unordered_map<int, std::vector<int>> factorcond__rule = {
         {KW_FALSE, factorcond_},
         {SEMICOLON, factorcond_},
