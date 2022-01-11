@@ -189,7 +189,7 @@ int main()
         {RBRACE, code_},
 
         {LBRACE, code_1},
-
+        {OP_ADD, code_2},
         {KW_LABEL, code_2},
         {SEMICOLON, code_2},
         {KW_BREAK, code_2},
@@ -261,6 +261,7 @@ int main()
         {KW_FLOAT, statement_11},
         {KW_INT, statement_11},
         {KW_BOOL, statement_11},
+        // {OP_ADD, }
         {KW_UNTYPED, statement_11}};
     tabela.insert({NT_STATEMENT, statement_rule});
 
@@ -328,16 +329,27 @@ int main()
 
     std::vector<int> indexblock_ = {EMPTY};
     std::vector<int> indexblock_1 = {LBRACKET, NT_INDEXBLOCKTYPES, RBRACKET, NT_INDEXBLOCK};
+    std::vector<int> indexblock_2 = {LPAREN, IDENTIFIER, NT_INDEXBLOCKTXT};
     std::unordered_map<int, std::vector<int>> indexblock_rule = {
         {SEMICOLON, indexblock_},
         {COLON, indexblock_},
         // {OP_EQUAL, indexblock_},
         {OP_ASSIGN, indexblock_},
-        {LBRACKET, indexblock_1}};
+        {LBRACKET, indexblock_1},
+        {LPAREN, indexblock_2}};
     tabela.insert({NT_INDEXBLOCK, indexblock_rule});
 
+    std::vector<int> indexblocktxt_ = {RPAREN};
+    std::vector<int> indexblocktxt_1 = {COMMA, IDENTIFIER, NT_INDEXBLOCKTXT};
+    std::unordered_map<int, std::vector<int>> indexblocktxt_rule = {
+        {RPAREN, indexblocktxt_},
+        {COMMA, indexblocktxt_1}
+    };
+    tabela.insert({NT_INDEXBLOCKTXT, indexblocktxt_rule});
+
+
     std::vector<int> indexblocktypes_ = {INT};
-    std::vector<int> indexblocktypes_1 = {NT_EXPRESSION};
+    std::vector<int> indexblocktypes_1 = {NT_EXPRESSION, };
     std::unordered_map<int, std::vector<int>> indexblocktypes_rules = {
         {INT, indexblocktypes_},
         {IDENTIFIER, indexblocktypes_1}
@@ -346,12 +358,12 @@ int main()
 
 
     std::vector<int> initializer_ = {EMPTY};
-    std::vector<int> initializer_1 = {OP_EQUAL, NT_EXPRESSION};
+    std::vector<int> initializer_1 = {OP_ASSIGN, NT_EXPRESSION};
     std::unordered_map<int, std::vector<int>> initializer_rule = {
         {SEMICOLON, initializer_},
         {COLON, initializer_},
-        {OP_EQUAL, initializer_1},
-        {OP_ASSIGN, initializer_1}};
+        {OP_ASSIGN, initializer_1}
+        };
     tabela.insert({NT_INITIALIZER, initializer_rule});
 
     std::vector<int> expression_ = {NT_LOGICALOR, NT_RESTEXPRESSION};
@@ -372,7 +384,7 @@ int main()
     tabela.insert({NT_EXPRESSION, expression_rule});
 
     std::vector<int> restexpression_ = {EMPTY};
-    std::vector<int> restexpression_1 = {OP_EQUAL, NT_LOGICALOR, NT_RESTEXPRESSION};
+    std::vector<int> restexpression_1 = {OP_ASSIGN, NT_LOGICALOR, NT_RESTEXPRESSION};
     std::unordered_map<int, std::vector<int>> restexpression_rule = {
         {RPAREN, restexpression_},
         {SEMICOLON, restexpression_},
@@ -383,7 +395,7 @@ int main()
         {OP_LOGICAL_AND, restexpression_},
         {OP_LOGICAL_OR, restexpression_},
         {OP_EQUAL, restexpression_},
-        {OP_ASSIGN, restexpression_},
+        {OP_ASSIGN, restexpression_1},
         {OP_NOTEQUAL, restexpression_},
         {OP_LESS, restexpression_},
         {OP_LESSEQUAL, restexpression_},
@@ -395,8 +407,7 @@ int main()
         {OP_SUBTRACT, restexpression_},
         {OP_MULTIPLY, restexpression_},
         {OP_DIVIDE, restexpression_},
-        {OP_MODULUS, restexpression_},
-        {OP_EQUAL, restexpression_1}};
+        {OP_MODULUS, restexpression_}};
     tabela.insert({NT_RESTEXPRESSION, restexpression_rule});
 
     std::vector<int> logicalor_ = {NT_LOGICALAND, NT_RESTLOGICALOR};
@@ -653,7 +664,7 @@ int main()
         {OP_LOGICAL_AND, restequality_},
         {OP_BITWISE_AND, restequality_},
         {OP_LOGICAL_OR, restequality_},
-        {OP_EQUAL, restequality_},
+        {OP_EQUAL, restequality_1},
         {OP_ASSIGN, restequality_},
         {OP_NOTEQUAL, restequality_},
         {OP_LESS, restequality_},
@@ -667,7 +678,6 @@ int main()
         {OP_MULTIPLY, restequality_},
         {OP_DIVIDE, restequality_},
         {OP_MODULUS, restequality_},
-        {OP_EQUAL, restequality_1},
         {OP_NOTEQUAL, restequality_1}};
     tabela.insert({NT_RESTEQUALITY, restequality_rule});
 
@@ -1091,9 +1101,6 @@ int main()
 
         int top = order.top();
 
-        if(top == 339){
-            top = 353;
-        }
 
         if(top != EMPTY){
             // se o topo da pilha for um terminal
