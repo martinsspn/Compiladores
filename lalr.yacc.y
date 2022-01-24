@@ -2,31 +2,32 @@
     int yylex(void);
     void yyerror(char *s){ EM_error(EM_tokPos, "%s", s); }
 %}
-%token module identifier extern  void start  multi label break continue if goto while do switch default return else case assign bool char float int  untyped true false
+%token KW_MODULE IDENTIFIER KW_EXTERN  KW_VOID KW_START KW_LABEL KW_BREAK KW_CONTINUE KW_IF KW_GOTO KW_WHILE DO KW_SWITCH KW_DEFAULT KW_RETURN KW_ELSE KW_CASE KW_BOOL KW_CHAR KW_DO KW_FLOAT KW_INT KW_UNTYPED KW_TRUE KW_FALSE INT FLOAT CHAR 
 %start PROG
-
-
+%left '+' '-'
+%left '*' '/'
+%left '!'
 %%
-PROG : module identifier ';' GLOBALS
+PROG : KW_MODULE IDENTIFIER ';' GLOBALS
 
 GLOBALS :  
         | GLOBAL GLOBALS
-        | extern GLOBAL GLOBALS
+        | KW_EXTERN GLOBAL GLOBALS
 
 GLOBAL : FUNCTION
        | DECLARATIONBLOCK ';'
 
 FUNCTION : FUNCTIONHEADER FUNCTIONREST
 
-FUNCTIONHEADER : MODIFIERS identifier ':' PARAMLIST '-''>' RETURNTYPE
+FUNCTIONHEADER : MODIFIERS IDENTIFIER ':' PARAMLIST '-''>' RETURNTYPE
 
 FUNCTIONREST : ';'
              | BLOCK
 
 MODIFIERS : 
-          | start
+          | KW_START
 
-PARAMLIST : void
+PARAMLIST : KW_VOID
           | PARAMBLOCK MOREPARAMBLOCK
 
 PARAMBLOCK : TYPE PARAM MOREPARAM
@@ -37,7 +38,7 @@ MOREPARAMBLOCK :
 MOREPARAM : 
           | ',' PARAM MOREPARAM
 
-PARAM : REFERENCE identifier DIMENSIONBLOCK
+PARAM : REFERENCE IDENTIFIER DIMENSIONBLOCK
 
 RETURNTYPE : TYPE REFERENCE DIMENSIONBLOCK
 
@@ -53,34 +54,34 @@ CODE :
      | BLOCK CODE
      | STATEMENT CODE
 
-STATEMENT : label identifier ';'
+STATEMENT : KW_LABEL IDENTIFIER ';'
           | ';'
-          | break ';'
-          | continue ';'
-          | if '(' EXPRESSION ')' BLOCK elseBLOCK
-          | goto identifier ';'
-          | while '(' EXPRESSION ')' do BLOCK
-          | do BLOCK while '(' EXPRESSION ')'
-          | switch '(' EXPRESSION ')' '{' SWITCHCASES default BLOCK '}'
-          | return EXPRESSION ';'
+          | KW_BREAK ';'
+          | KW_CONTINUE ';'
+          | KW_IF '(' EXPRESSION ')' BLOCK elseBLOCK
+          | KW_GOTO IDENTIFIER ';'
+          | KW_WHILE '(' EXPRESSION ')' KW_DO BLOCK
+          | KW_DO BLOCK KW_WHILE '(' EXPRESSION ')'
+          | KW_SWITCH '(' EXPRESSION ')' '{' SWITCHCASES KW_DEFAULT BLOCK '}'
+          | KW_RETURN EXPRESSION ';'
           | EXPRESSION ';'
           | DECLARATIONBLOCK ';'
 
 elseBLOCK : 
-          | else BLOCK
+          | KW_ELSE BLOCK
 
 SWITCHCASES : 
-            | case int BLOCK SWITCHCASES
+            | KW_CASE INT BLOCK SWITCHCASES
 
 DECLARATIONBLOCK : TYPE DECLARATION RESTDECLARATION
 
-DECLARATION : REFERENCE identifier INDEXBLOCK INITIALIZER
+DECLARATION : REFERENCE IDENTIFIER INDEXBLOCK INITIALIZER
 
 RESTDECLARATION : 
                 | ',' DECLARATION RESTDECLARATION
 
 INDEXBLOCK :
-           | '[' int ']' INDEXBLOCK
+           | '[' INT ']' INDEXBLOCK
 
 INITIALIZER : 
             | '=' EXPRESSION
@@ -159,20 +160,16 @@ MULTIPLICATIONOPERATOR : '*'
                        | '%'
 
 UNARY3 : UNARY2
-       | UNARY3OPERATOR UNARY2
-
-UNARY3OPERATOR : '&'
-               | '*'
-               | '-'
+       | '&' UNARY2
+       | '*' UNARY2
+       | '-' UNARY2
 
 UNARY2 : FACTOR
-       | UNARY2OPERATOR FACTOR
+       | '+' FACTOR
+       | '-' FACTOR
+       | '!' FACTOR
 
-UNARY2OPERATOR : '+'
-               | '-'
-               | '!'
-
-FACTOR : identifier APPLICATION
+FACTOR : IDENTIFIER APPLICATION
        | IMMEDIATE
        | '(' EXPRESSION ')'
 
@@ -183,11 +180,13 @@ APPLICATION :
 MOREEXPRESSION : 
                | ',' EXPRESSION MOREEXPRESSION
 
-TYPE : bool
-     | char
-     | float
-     | int
-     | untyped
+TYPE : KW_BOOL
+     | KW_CHAR
+     | KW_FLOAT
+     | KW_INT
 
-IMMEDIATE : true
-          | false
+IMMEDIATE : KW_TRUE
+          | KW_FALSE
+          | CHAR
+          | FLOAT
+          | INT

@@ -6,7 +6,7 @@ GLOBALS,"{'',extern,bool,char,float,int,untyped,start,IDENTIFIER,;,{}",{$},2,$
 GLOBAL,"{bool,char,float,int,untyped,'',start,IDENTIFIER,;,{}","{$,extern,bool,char,float,int,untyped,start,IDENTIFIER,;,{}",5,"$,extern,start,IDENTIFIER,;,{"
 ,,,6,"bool,char,float,int,untyped"
 FUNCTION,"{'',start,IDENTIFIER,;,{}","{$,extern,bool,char,float,int,untyped,start,IDENTIFIER,;,{}",7,"$,extern,bool,char,float,int,untyped,start,IDENTIFIER,;,{"
-FUNCTIONHEADER,"{'',start,IDENTIFIER}","{;,{}",8,";, start, {"
+FUNCTIONHEADER,"{'',start,IDENTIFIER}","{;,{}",8,";, start, IDENTIFIER, {"
 FUNCTIONREST,"{;,{}","{$,extern,bool,char,float,int,untyped,start,IDENTIFIER,;,{}",9,SEMICOLON
 ,,,10,{
 MODIFIERS,"{'',start}",{IDENTIFIER},11,IDENTIFIER
