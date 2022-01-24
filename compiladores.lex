@@ -36,7 +36,7 @@ error ("\n"|".")
 "/*"(.|\n)*"*/"           ;
 " "                       col++;
 ."\n"                     col = 1;
-"do"                      col += yyleng; return DO;
+"do"                      col += yyleng; return KW_DO;
 "module"                  col += yyleng; return KW_MODULE;
 "while"                   col += yyleng; return KW_WHILE;
 "extern"                  col += yyleng; return KW_EXTERN;
