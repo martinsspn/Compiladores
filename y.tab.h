@@ -49,61 +49,71 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    module = 258,
-    identifier = 259,
-    extern = 260,
-    void = 261,
-    start = 262,
-    multi = 263,
-    label = 264,
-    break = 265,
-    continue = 266,
-    if = 267,
-    goto = 268,
-    while = 269,
-    do = 270,
-    switch = 271,
-    default = 272,
-    return = 273,
-    else = 274,
-    case = 275,
-    assign = 276,
-    bool = 277,
-    char = 278,
-    float = 279,
-    int = 280,
-    untyped = 281,
-    true = 282,
-    false = 283
+    KW_MODULE = 258,
+    IDENTIFIER = 259,
+    KW_EXTERN = 260,
+    KW_VOID = 261,
+    KW_START = 262,
+    KW_LABEL = 263,
+    KW_BREAK = 264,
+    KW_CONTINUE = 265,
+    KW_IF = 266,
+    KW_GOTO = 267,
+    KW_WHILE = 268,
+    KW_SWITCH = 269,
+    KW_DEFAULT = 270,
+    KW_RETURN = 271,
+    KW_ELSE = 272,
+    KW_CASE = 273,
+    KW_BOOL = 274,
+    KW_CHAR = 275,
+    KW_DO = 276,
+    KW_FLOAT = 277,
+    KW_INT = 278,
+    KW_TRUE = 279,
+    KW_FALSE = 280,
+    INT = 281,
+    FLOAT = 282,
+    CHAR = 283,
+    OP_LOGICAL_OR = 284,
+    OP_LOGICAL_AND = 285,
+    OP_BITWISE_RSHIFT = 286,
+    OP_BITWISE_LSHIFT = 287,
+    OP_EQUAL = 288
   };
 #endif
 /* Tokens.  */
-#define module 258
-#define identifier 259
-#define extern 260
-#define void 261
-#define start 262
-#define multi 263
-#define label 264
-#define break 265
-#define continue 266
-#define if 267
-#define goto 268
-#define while 269
-#define do 270
-#define switch 271
-#define default 272
-#define return 273
-#define else 274
-#define case 275
-#define assign 276
-#define bool 277
-#define char 278
-#define float 279
-#define int 280
-#define untyped 281
-#define true 282
-#define false 283
+#define KW_MODULE 258
+#define IDENTIFIER 259
+#define KW_EXTERN 260
+#define KW_VOID 261
+#define KW_START 262
+#define KW_LABEL 263
+#define KW_BREAK 264
+#define KW_CONTINUE 265
+#define KW_IF 266
+#define KW_GOTO 267
+#define KW_WHILE 268
+#define KW_SWITCH 269
+#define KW_DEFAULT 270
+#define KW_RETURN 271
+#define KW_ELSE 272
+#define KW_CASE 273
+#define KW_BOOL 274
+#define KW_CHAR 275
+#define KW_DO 276
+#define KW_FLOAT 277
+#define KW_INT 278
+#define KW_TRUE 279
+#define KW_FALSE 280
+#define INT 281
+#define FLOAT 282
+#define CHAR 283
+#define OP_LOGICAL_OR 284
+#define OP_LOGICAL_AND 285
+#define OP_BITWISE_RSHIFT 286
+#define OP_BITWISE_LSHIFT 287
+#define OP_EQUAL 288
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
