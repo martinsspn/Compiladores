@@ -8,8 +8,8 @@ merge: int arr[], left, mid, right -> void
     int n1 = m - l + 1;
     int n2 = r - m;
 
-    int L[n1];
-    int R[n2];
+    int L[4];
+    int R[4];
 
     while(i < n1) do
     {

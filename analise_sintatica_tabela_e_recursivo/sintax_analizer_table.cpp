@@ -197,7 +197,7 @@ int main()
         {KW_IF, code_2},
         {KW_GOTO, code_2},
         {KW_WHILE, code_2},
-        {DO, code_2},
+        {KW_DO, code_2},
         {KW_SWITCH, code_2},
         {KW_RETURN, code_2},
         {IDENTIFIER, code_2},

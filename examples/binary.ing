@@ -1,26 +1,23 @@
-module binary_search;
+module teste;
 
-
-binary_search : int array[], n, search -> bool
+teste : int array[], n, search -> bool
 {
-  int first = 0;
-  int last = n - 1;
-  int middle = (firs + last ) / 2;
-  
-  while ( first <= last) do
-  {
-    if (array[middle] == search)
+    int first = 0;
+    int last = n - 1;
+    int middle = (first + last) / 2;
+
+    while( first <= last ) do
     {
-      first = middle + 1;
+        if (array[middle] == search){
+            first = middle + 1;
+        }
+        if(array[middle] == search){
+            return true;
+        } else{
+            last = middle - 1;
+        }
     }
-    if (array[middle] == search) 
-    {
-      return true;
-    }
-    else
-    {
-      last = middle - 1;
-    }
-  }
-  return false;
+
+    return false;
+
 }

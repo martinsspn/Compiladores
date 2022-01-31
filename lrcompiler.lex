@@ -10,6 +10,7 @@ int col = 1;
 
 %}
 
+
 %option yylineno
 
 letter     [a-zA-Z]
@@ -25,7 +26,6 @@ bin    [0-1]+"b"
 int    ("-"|"")({digit}){1,32}
 floatpoint {int}("."|""){digit}{0,32}
 string \".*.\"
-error ("\n"|".")
 
 
 
@@ -99,7 +99,7 @@ error ("\n"|".")
 {charobj}                 col += yyleng; return CHAR;
 {string}                  col += yyleng; return STRING;
 {identifier}              col += yyleng; return IDENTIFIER;
-.                         col += yyleng; return ERROR;
+.                         col += yyleng;  return ERROR;
 %%
 int yywrap(void) {
     return 1;
