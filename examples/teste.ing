@@ -29,7 +29,7 @@ merge : int arr[], left, mid, right -> bool
     }
 }
 
-mergesort: int arr[], begin, end -> bool {
+mergesort1: int arr[], begin, end -> bool {
     if (begin < end){
         int m = begin + (end - begin) / 2;
 

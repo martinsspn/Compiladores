@@ -9,9 +9,9 @@ int yylex();
 
 
 Symbol * sym_table;
-Symbol * addSymbol(char* nome);
+Symbol * addSymbol(char* nome, int param);
 Symbol * findSymbol(char * nome);
-void install(char *nome);
+void install(char *nome, int paramfunc);
 void context_check(char *nome);
 void criarNovoSimbolo(TreeScope * ts, char * name, int type);
 %}
@@ -27,7 +27,7 @@ void criarNovoSimbolo(TreeScope * ts, char * name, int type);
 %%
 
 PROG :        /* empty */     
-       | KW_MODULE IDENTIFIER ';' GLOBALS { install( $<string>2 ); }
+       | KW_MODULE IDENTIFIER ';' GLOBALS { install( $<string>2, 0 ); }
        ;
 
 GLOBALS :  /* empty */
@@ -42,7 +42,7 @@ GLOBAL : FUNCTION
 FUNCTION : FUNCTIONHEADER FUNCTIONREST
            ;
 
-FUNCTIONHEADER : MODIFIERS IDENTIFIER ':' PARAMLIST ARROW RETURNTYPE { install($<string>2); }
+FUNCTIONHEADER : MODIFIERS IDENTIFIER ':' PARAMLIST ARROW RETURNTYPE { install($<string>2, 0); }
                ;
 
 FUNCTIONREST : ';'
@@ -68,7 +68,7 @@ MOREPARAM :
           | ',' PARAM MOREPARAM
           ;
 
-PARAM : REFERENCE IDENTIFIER DIMENSIONBLOCK { install( $<string>2 ); }
+PARAM : REFERENCE IDENTIFIER DIMENSIONBLOCK { install( $<string>2, 1 ); }
       ;
 
 RETURNTYPE : KW_VOID DIMENSIONBLOCK
@@ -91,12 +91,12 @@ CODE :
      | STATEMENT CODE
      ;
 
-STATEMENT : KW_LABEL IDENTIFIER ';' { install($<string>2); }
+STATEMENT : KW_LABEL IDENTIFIER ';' { install($<string>2, 0); }
           | ';'
           | KW_BREAK ';'
           | KW_CONTINUE ';'
           | KW_IF '(' EXPRESSION ')' BLOCK elseBLOCK
-          | KW_GOTO IDENTIFIER ';' { install($<string>2); }
+          | KW_GOTO IDENTIFIER ';' { install($<string>2,0); }
           | KW_WHILE '(' EXPRESSION ')' KW_DO BLOCK
           | KW_DO BLOCK KW_WHILE '(' EXPRESSION ')'
           | KW_SWITCH '(' EXPRESSION ')' '{' SWITCHCASES KW_DEFAULT BLOCK '}'
@@ -116,7 +116,7 @@ SWITCHCASES :
 DECLARATIONBLOCK : TYPE DECLARATION RESTDECLARATION
                  ;
 
-DECLARATION : REFERENCE IDENTIFIER INDEXBLOCK INITIALIZER { install($<string>2); }
+DECLARATION : REFERENCE IDENTIFIER INDEXBLOCK INITIALIZER { install($<string>2, 0); }
             ;
 
 RESTDECLARATION : 
@@ -272,11 +272,12 @@ IMMEDIATE : KW_TRUE
 
 %%
 
-Symbol * addSymbol(char* nome){
+Symbol * addSymbol(char* nome, int param){
        printf("NOME = %s\n", nome);
        Symbol *s;
        s = (Symbol *) malloc (sizeof(Symbol));
        s->name = (char *) malloc(strlen(nome)+1);
+       s->paramFunc = param;
        strcpy(s->name, nome);
        s->nextSymbol = (struct Symbol *) sym_table;
        sym_table = s;
@@ -286,18 +287,18 @@ Symbol * addSymbol(char* nome){
 Symbol * findSymbol(char * nome){
        Symbol * s;
        for(s = sym_table; s != (Symbol *) 0; s = (Symbol *) s->nextSymbol){
-              if(strcmp(s->name, nome) == 0){
+              if(strcmp(s->name, nome) == 0 && s->paramFunc == 0){
                      return s;
               }
        }
        return 0;
 }
 
-void install(char * nome){
+void install(char * nome, int paramfunc){
        Symbol * s;
        s = findSymbol(nome);
        if(s == 0){
-              s = addSymbol(nome);
+              s = addSymbol(nome, paramfunc);
        } else{
               printf("%s já foi declarado\n", nome);
        }

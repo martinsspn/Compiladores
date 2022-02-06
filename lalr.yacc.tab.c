@@ -78,9 +78,9 @@ int yylex();
 
 
 Symbol * sym_table;
-Symbol * addSymbol(char* nome);
+Symbol * addSymbol(char* nome, int param);
 Symbol * findSymbol(char * nome);
-void install(char *nome);
+void install(char *nome, int paramfunc);
 void context_check(char *nome);
 void criarNovoSimbolo(TreeScope * ts, char * name, int type);
 
@@ -1533,37 +1533,37 @@ yyreduce:
     {
   case 3:
 #line 30 "lalr.yacc.y"
-                                          { install( (yyvsp[-2].string) ); }
+                                          { install( (yyvsp[-2].string), 0 ); }
 #line 1538 "lalr.yacc.tab.c"
     break;
 
   case 10:
 #line 45 "lalr.yacc.y"
-                                                                     { install((yyvsp[-4].string)); }
+                                                                     { install((yyvsp[-4].string), 0); }
 #line 1544 "lalr.yacc.tab.c"
     break;
 
   case 22:
 #line 71 "lalr.yacc.y"
-                                            { install( (yyvsp[-1].string) ); }
+                                            { install( (yyvsp[-1].string), 1 ); }
 #line 1550 "lalr.yacc.tab.c"
     break;
 
   case 33:
 #line 94 "lalr.yacc.y"
-                                    { install((yyvsp[-1].string)); }
+                                    { install((yyvsp[-1].string), 0); }
 #line 1556 "lalr.yacc.tab.c"
     break;
 
   case 38:
 #line 99 "lalr.yacc.y"
-                                   { install((yyvsp[-1].string)); }
+                                   { install((yyvsp[-1].string),0); }
 #line 1562 "lalr.yacc.tab.c"
     break;
 
   case 50:
 #line 119 "lalr.yacc.y"
-                                                          { install((yyvsp[-2].string)); }
+                                                          { install((yyvsp[-2].string), 0); }
 #line 1568 "lalr.yacc.tab.c"
     break;
 
@@ -1803,11 +1803,12 @@ yyreturn:
 #line 273 "lalr.yacc.y"
 
 
-Symbol * addSymbol(char* nome){
+Symbol * addSymbol(char* nome, int param){
        printf("NOME = %s\n", nome);
        Symbol *s;
        s = (Symbol *) malloc (sizeof(Symbol));
        s->name = (char *) malloc(strlen(nome)+1);
+       s->paramFunc = param;
        strcpy(s->name, nome);
        s->nextSymbol = (struct Symbol *) sym_table;
        sym_table = s;
@@ -1817,18 +1818,18 @@ Symbol * addSymbol(char* nome){
 Symbol * findSymbol(char * nome){
        Symbol * s;
        for(s = sym_table; s != (Symbol *) 0; s = (Symbol *) s->nextSymbol){
-              if(strcmp(s->name, nome) == 0){
+              if(strcmp(s->name, nome) == 0 && s->paramFunc == 0){
                      return s;
               }
        }
        return 0;
 }
 
-void install(char * nome){
+void install(char * nome, int paramfunc){
        Symbol * s;
        s = findSymbol(nome);
        if(s == 0){
-              s = addSymbol(nome);
+              s = addSymbol(nome, paramfunc);
        } else{
               printf("%s já foi declarado\n", nome);
        }

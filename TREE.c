@@ -24,6 +24,7 @@ typedef struct TreeScope{
 
 typedef struct Symbol{
     char* name;
+    int paramFunc;
     int type;
     struct Symbol *nextSymbol;
 } Symbol;
