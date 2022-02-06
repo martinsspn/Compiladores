@@ -4,10 +4,11 @@
  */
 
 %{
-#include "lex.yy.h"
+//#include "lex.yy.h"
 int col = 1;
-
-
+#include "lalr.yacc.tab.h"
+#define YYSTYPE yyltype
+#define ERROR 500
 %}
 
 
@@ -55,7 +56,6 @@ string \".*.\"
 "bool"                    col += yyleng; return KW_BOOL;
 "float"                   col += yyleng; return KW_FLOAT;
 "char"                    col += yyleng; return KW_CHAR;
-"untyped"                 col += yyleng; return KW_UNTYPED;
 "void"                    col += yyleng; return KW_VOID;
 "return"                  col += yyleng; return KW_RETURN;
 "start"                   col += yyleng; return KW_START;
@@ -91,14 +91,10 @@ string \".*.\"
 "="                       col += yyleng; return '=';
 "|"                       col += yyleng; return '|';
 "?"                       col += yyleng; return '?';
-"#import"                 col += yyleng; return KW_IMPORT;
-{hex}                     col += yyleng; return HEX;
-{bin}                     col += yyleng; return BIN;
-{int}                     col += yyleng; return INT;
-{floatpoint}              col += yyleng; return FLOAT;
-{charobj}                 col += yyleng; return CHAR;
-{string}                  col += yyleng; return STRING;
-{identifier}              col += yyleng; return IDENTIFIER;
+{int}                     col += yyleng; yylval.itype = (int) atoi(yytext); return INT;
+{floatpoint}              col += yyleng; yylval.dtype = (double) atol(yytext); return FLOAT;
+{charobj}                 col += yyleng; yylval.ctype = (char) yytext[0]; return CHAR;
+{identifier}              col += yyleng; yylval.string = (char *) strdup(yytext); return IDENTIFIER;
 .                         col += yyleng;  return ERROR;
 %%
 int yywrap(void) {
