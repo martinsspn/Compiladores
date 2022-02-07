@@ -2,8 +2,8 @@ module mergesort;
 
 merge : int arr[]; int left; int mid; int right -> bool
 {
-    int i = 'a';
-    int j = 0;
+    int i = 1;
+    float j = 3.4;
     int k;
     int n1 = m - l + 1;
     int n2 = r - m;
@@ -30,14 +30,7 @@ merge : int arr[]; int left; int mid; int right -> bool
 }
 
 mergesort1: int arr[], begin, end -> bool {
-    if (begin < end){
-        int m = begin + (end - begin) / 2;
-
-        mergesort(arr, begin, m);
-        mergesort(arr, m+1, end);
-
-        merge(arr, begin, m, end);
-    }
+    
 }
 
 start main: void -> bool {

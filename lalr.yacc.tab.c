@@ -78,13 +78,19 @@ int yylex();
 
 
 Symbol * sym_table;
-Symbol * addSymbol(char* nome, int param, int type);
+TreeScope * tree_table;
+Symbol * addSymbol(char* nome, int param, int type, int isOperand);
 Symbol * findSymbol(char * nome);
-void install(char *nome, int paramfunc, int type);
+void installScope(char * nome);
+void install(char *nome, int paramfunc, int type, int isOperand);
 void context_check(char *nome);
 void criarNovoSimbolo(TreeScope * ts, char * name, int type);
 
-#line 88 "lalr.yacc.tab.c"
+void check_type();
+TreeScope * newScopeSibling(char* nome);
+TreeScope * newScopeChild(char* nome);
+
+#line 94 "lalr.yacc.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -174,14 +180,15 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 21 "lalr.yacc.y"
+#line 27 "lalr.yacc.y"
 
        int itype;
        double dtype;
        char ctype;
        char* string;
+       int type;
 
-#line 185 "lalr.yacc.tab.c"
+#line 192 "lalr.yacc.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -560,19 +567,19 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    29,    29,    30,    33,    34,    35,    38,    39,    42,
-      45,    48,    49,    52,    53,    56,    57,    60,    63,    64,
-      67,    68,    71,    74,    75,    78,    79,    82,    83,    86,
-      89,    90,    91,    94,    95,    96,    97,    98,    99,   100,
-     101,   102,   103,   104,   105,   108,   109,   112,   113,   116,
-     119,   122,   123,   126,   127,   128,   131,   132,   135,   138,
-     139,   142,   145,   146,   149,   152,   153,   156,   159,   160,
-     163,   166,   167,   170,   173,   174,   177,   180,   181,   184,
-     185,   188,   191,   192,   195,   196,   197,   198,   201,   204,
-     205,   208,   209,   212,   215,   216,   219,   222,   223,   227,
-     230,   231,   235,   238,   239,   242,   243,   244,   247,   248,
-     249,   250,   253,   254,   255,   258,   259,   260,   263,   264,
-     267,   268,   269,   270,   273,   274,   275,   276,   277
+       0,    36,    36,    37,    40,    41,    42,    45,    46,    49,
+      52,    55,    56,    59,    60,    63,    64,    67,    70,    71,
+      74,    75,    78,    81,    82,    85,    86,    89,    90,    93,
+      96,    97,    98,   101,   102,   103,   104,   105,   106,   107,
+     108,   109,   110,   111,   112,   115,   116,   119,   120,   123,
+     126,   129,   130,   133,   134,   135,   138,   139,   142,   145,
+     146,   149,   152,   153,   156,   159,   160,   163,   166,   167,
+     170,   173,   174,   177,   180,   181,   184,   187,   188,   191,
+     192,   195,   198,   199,   202,   203,   204,   205,   208,   211,
+     212,   215,   216,   219,   222,   223,   226,   229,   230,   234,
+     237,   238,   242,   245,   246,   249,   250,   251,   254,   255,
+     256,   257,   260,   261,   262,   265,   266,   267,   270,   271,
+     274,   275,   276,   277,   280,   281,   282,   283,   284
 };
 #endif
 
@@ -1536,145 +1543,187 @@ yyreduce:
   switch (yyn)
     {
   case 3:
-#line 30 "lalr.yacc.y"
-                                          { install( (yyvsp[-2].string), 0, 0 ); }
-#line 1542 "lalr.yacc.tab.c"
+#line 37 "lalr.yacc.y"
+                                          { installScope( (yyvsp[-2].string) ); }
+#line 1549 "lalr.yacc.tab.c"
     break;
 
   case 10:
-#line 45 "lalr.yacc.y"
-                                                                     { install((yyvsp[-4].string), 0, 0); }
-#line 1548 "lalr.yacc.tab.c"
+#line 52 "lalr.yacc.y"
+                                                                     { installScope((yyvsp[-4].string)); }
+#line 1555 "lalr.yacc.tab.c"
     break;
 
   case 22:
-#line 71 "lalr.yacc.y"
-                                             { install( (yyvsp[-1].string), 1, (yyvsp[-2].itype) ); }
-#line 1554 "lalr.yacc.tab.c"
+#line 78 "lalr.yacc.y"
+                                             { install( (yyvsp[-1].string), 1, (yyvsp[-2].itype), 0 ); }
+#line 1561 "lalr.yacc.tab.c"
     break;
 
   case 33:
-#line 94 "lalr.yacc.y"
-                                    { install((yyvsp[-1].string), 0, 0); }
-#line 1560 "lalr.yacc.tab.c"
+#line 101 "lalr.yacc.y"
+                                    { install((yyvsp[-1].string), 0, 0, 0); }
+#line 1567 "lalr.yacc.tab.c"
     break;
 
   case 38:
-#line 99 "lalr.yacc.y"
-                                   { install((yyvsp[-1].string),0, 0); }
-#line 1566 "lalr.yacc.tab.c"
+#line 106 "lalr.yacc.y"
+                                   { install((yyvsp[-1].string),0, 0, 0); }
+#line 1573 "lalr.yacc.tab.c"
+    break;
+
+  case 49:
+#line 123 "lalr.yacc.y"
+                                                    {install((yyvsp[-1].string), 0, (yyvsp[-2].type), 0); }
+#line 1579 "lalr.yacc.tab.c"
     break;
 
   case 50:
-#line 119 "lalr.yacc.y"
-                                                          { install((yyvsp[-2].string), 0, (yyvsp[-3].itype)); }
-#line 1572 "lalr.yacc.tab.c"
+#line 126 "lalr.yacc.y"
+                                                          { (yyval.string) = (yyvsp[-2].string);  }
+#line 1585 "lalr.yacc.tab.c"
     break;
 
   case 56:
-#line 131 "lalr.yacc.y"
+#line 138 "lalr.yacc.y"
               { (yyval.itype) = 0; }
-#line 1578 "lalr.yacc.tab.c"
+#line 1591 "lalr.yacc.tab.c"
     break;
 
   case 57:
-#line 132 "lalr.yacc.y"
-                             { (yyval.itype) = (yyvsp[0].itype); }
-#line 1584 "lalr.yacc.tab.c"
+#line 139 "lalr.yacc.y"
+                             { (yyval.type) = (yyvsp[0].type); (yyval.itype) = (yyvsp[0].itype); }
+#line 1597 "lalr.yacc.tab.c"
     break;
 
   case 93:
-#line 212 "lalr.yacc.y"
+#line 219 "lalr.yacc.y"
                                     { (yyval.itype) = (yyvsp[-1].itype) + (yyvsp[0].itype); }
-#line 1590 "lalr.yacc.tab.c"
+#line 1603 "lalr.yacc.tab.c"
     break;
 
   case 94:
-#line 215 "lalr.yacc.y"
+#line 222 "lalr.yacc.y"
                { (yyval.itype) = 0; }
-#line 1596 "lalr.yacc.tab.c"
+#line 1609 "lalr.yacc.tab.c"
     break;
 
   case 95:
-#line 216 "lalr.yacc.y"
-                                            { (yyval.itype) = (yyvsp[-1].itype) + (yyvsp[0].itype); }
-#line 1602 "lalr.yacc.tab.c"
+#line 223 "lalr.yacc.y"
+                                            { (yyval.itype) = (yyvsp[-1].itype) + (yyvsp[0].itype); install("+", 0, 0, 1); }
+#line 1615 "lalr.yacc.tab.c"
     break;
 
   case 96:
-#line 219 "lalr.yacc.y"
+#line 226 "lalr.yacc.y"
                                              { (yyval.itype) = (yyvsp[-1].itype) - (yyvsp[0].itype); }
-#line 1608 "lalr.yacc.tab.c"
+#line 1621 "lalr.yacc.tab.c"
     break;
 
   case 97:
-#line 222 "lalr.yacc.y"
+#line 229 "lalr.yacc.y"
                   { (yyval.itype) = 0; }
-#line 1614 "lalr.yacc.tab.c"
+#line 1627 "lalr.yacc.tab.c"
     break;
 
   case 98:
-#line 223 "lalr.yacc.y"
-                                                     { (yyval.itype) = (yyvsp[-1].itype) - (yyvsp[0].itype); }
-#line 1620 "lalr.yacc.tab.c"
+#line 230 "lalr.yacc.y"
+                                                     { (yyval.itype) = (yyvsp[-1].itype) - (yyvsp[0].itype); install("-", 0, 0, 1); }
+#line 1633 "lalr.yacc.tab.c"
     break;
 
   case 99:
-#line 227 "lalr.yacc.y"
+#line 234 "lalr.yacc.y"
                                            { (yyval.itype) = (yyvsp[-1].itype) * (yyvsp[0].itype); }
-#line 1626 "lalr.yacc.tab.c"
+#line 1639 "lalr.yacc.tab.c"
     break;
 
   case 100:
-#line 230 "lalr.yacc.y"
+#line 237 "lalr.yacc.y"
                      { (yyval.itype) = 1; }
-#line 1632 "lalr.yacc.tab.c"
+#line 1645 "lalr.yacc.tab.c"
     break;
 
   case 101:
-#line 231 "lalr.yacc.y"
-                                                   { (yyval.itype) = (yyvsp[-1].itype) * (yyvsp[0].itype); }
-#line 1638 "lalr.yacc.tab.c"
+#line 238 "lalr.yacc.y"
+                                                   { (yyval.itype) = (yyvsp[-1].itype) * (yyvsp[0].itype); install("*", 0, 0, 1);}
+#line 1651 "lalr.yacc.tab.c"
     break;
 
   case 102:
-#line 235 "lalr.yacc.y"
+#line 242 "lalr.yacc.y"
                            { (yyval.itype) = (yyvsp[-1].itype) / (yyvsp[0].itype); }
-#line 1644 "lalr.yacc.tab.c"
+#line 1657 "lalr.yacc.tab.c"
     break;
 
   case 103:
-#line 238 "lalr.yacc.y"
+#line 245 "lalr.yacc.y"
             { (yyval.itype) = 1; }
-#line 1650 "lalr.yacc.tab.c"
+#line 1663 "lalr.yacc.tab.c"
     break;
 
   case 104:
-#line 239 "lalr.yacc.y"
-                                  { (yyval.itype) = (yyvsp[-1].itype) / (yyvsp[0].itype); }
-#line 1656 "lalr.yacc.tab.c"
+#line 246 "lalr.yacc.y"
+                                  { (yyval.itype) = (yyvsp[-1].itype) / (yyvsp[0].itype); install("/", 0, 0, 1); }
+#line 1669 "lalr.yacc.tab.c"
     break;
 
   case 108:
-#line 247 "lalr.yacc.y"
+#line 254 "lalr.yacc.y"
                 { (yyval.itype) = (yyvsp[0].itype); }
-#line 1662 "lalr.yacc.tab.c"
+#line 1675 "lalr.yacc.tab.c"
     break;
 
   case 109:
-#line 248 "lalr.yacc.y"
+#line 255 "lalr.yacc.y"
                     { (yyval.itype) = (yyvsp[0].itype); }
-#line 1668 "lalr.yacc.tab.c"
+#line 1681 "lalr.yacc.tab.c"
     break;
 
   case 110:
-#line 249 "lalr.yacc.y"
+#line 256 "lalr.yacc.y"
                     { (yyval.itype) = (-1) * (yyvsp[0].itype); }
-#line 1674 "lalr.yacc.tab.c"
+#line 1687 "lalr.yacc.tab.c"
+    break;
+
+  case 121:
+#line 275 "lalr.yacc.y"
+               { (yyval.type) = (yyvsp[0].type); }
+#line 1693 "lalr.yacc.tab.c"
+    break;
+
+  case 122:
+#line 276 "lalr.yacc.y"
+                { (yyval.type) = (yyvsp[0].type); }
+#line 1699 "lalr.yacc.tab.c"
+    break;
+
+  case 123:
+#line 277 "lalr.yacc.y"
+              { (yyval.type) = (yyvsp[0].type); }
+#line 1705 "lalr.yacc.tab.c"
+    break;
+
+  case 126:
+#line 282 "lalr.yacc.y"
+                  { (yyval.ctype) = (yyvsp[0].ctype); }
+#line 1711 "lalr.yacc.tab.c"
+    break;
+
+  case 127:
+#line 283 "lalr.yacc.y"
+                  { (yyval.dtype) = (yyvsp[0].dtype); }
+#line 1717 "lalr.yacc.tab.c"
+    break;
+
+  case 128:
+#line 284 "lalr.yacc.y"
+                { (yyval.itype) = (yyvsp[0].itype); }
+#line 1723 "lalr.yacc.tab.c"
     break;
 
 
-#line 1678 "lalr.yacc.tab.c"
+#line 1727 "lalr.yacc.tab.c"
 
       default: break;
     }
@@ -1906,34 +1955,40 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 280 "lalr.yacc.y"
+#line 287 "lalr.yacc.y"
 
 
-//TreeScope * newScopeSibling(char* nome){
-//       TreeScope * ts;
-//       ts = (TreeScope *) malloc (sizeof(TreeScope));
-//       ts->name = (char *) malloc(strlen(nome)+1);
-//       strcmp(ts->name, nome);
-//       ts->nextSiblingScope = (struct TreeScope *) tree_table;
-//       tree_table = ts;
-//       return ts;
-//}
-//
-//TreeScope * newScopeChild(char* nome){
-//       TreeScope * ts;
-//       ts = (TreeScope *) malloc (sizeof(TreeScope));
-//       ts->name = (char *) malloc(strlen(nome)+1);
-//       strcmp(ts->name, nome);
-//       ts->firstChildScope = (struct TreeScope *) tree_table;
-//       tree_table = ts;
-//       return ts;
-//}
+TreeScope * newScopeSibling(char* nome){
+       TreeScope * ts;
+       ts = (TreeScope *) malloc (sizeof(TreeScope));
+       ts->name = (char *) malloc(strlen(nome)+1);
+       strcpy(ts->name, nome);
+       ts->nextSiblingScope = (struct TreeScope *) tree_table;
+       tree_table = ts;
+       sym_table = ts->symbols;
+       return ts;
+}
 
-Symbol * addSymbol(char* nome, int param, int type){
+TreeScope * newScopeChild(char* nome){
+       TreeScope * ts;
+       ts = (TreeScope *) malloc (sizeof(TreeScope));
+       ts->name = (char *) malloc(strlen(nome)+1);
+       strcpy(ts->name, nome);
+       ts->symbols = sym_table;
+       ts->firstChildScope = (struct TreeScope *) tree_table;
+       tree_table = ts;
+       Symbol *s;
+       //s = (Symbol *) malloc (sizeof(Symbol));
+       sym_table = s;
+       return ts;
+}
+
+Symbol * addSymbol(char* nome, int param, int type, int isOperand){
        Symbol *s;
        s = (Symbol *) malloc (sizeof(Symbol));
        s->name = (char *) malloc(strlen(nome)+1);
        s->type = type;
+       s->isOperand = isOperand;
        s->paramFunc = param;
        strcpy(s->name, nome);
        s->nextSymbol = (struct Symbol *) sym_table;
@@ -1944,18 +1999,38 @@ Symbol * addSymbol(char* nome, int param, int type){
 Symbol * findSymbol(char * nome){
        Symbol * s;
        for(s = sym_table; s != (Symbol *) 0; s = (Symbol *) s->nextSymbol){
-              if(strcmp(s->name, nome) == 0 && s->paramFunc == 0){
+              if(strcmp(s->name, nome) == 0 && s->paramFunc == 0 && s->isOperand == 0){
                      return s;
               }
        }
        return 0;
 }
 
-void install(char * nome, int paramfunc, int type){
+TreeScope * findScope(char *nome){
+       TreeScope * ts;
+       for(ts = tree_table; ts != (TreeScope *) 0; ts = (TreeScope *) ts->firstChildScope){
+              if(strcmp(ts->name, nome) == 0){
+                     return ts;
+              }
+       }
+       return 0;
+}
+
+void installScope(char * nome){
+       TreeScope * ts;
+       ts = findScope(nome);
+       if(ts == 0){
+              ts = newScopeChild(nome);
+       } else{
+              printf("Escopo já foi definido\n");
+       }
+}
+
+void install(char * nome, int paramfunc, int type, int isOperand){
        Symbol * s;
        s = findSymbol(nome);
        if(s == 0){
-              s = addSymbol(nome, paramfunc, type);
+              s = addSymbol(nome, paramfunc, type, isOperand);
        } else{
               printf("%s já foi declarado\n", nome);
        }
@@ -1967,6 +2042,21 @@ void context_check(char *nome){
        }
 }
 
+void check_type(){
+       printf("Começou\n");
+       TreeScope *ts;
+       for(ts = tree_table; ts != (TreeScope *) 0; ts = (TreeScope *) ts->firstChildScope){
+              printf("Percorrendo: %s\n", ts->name);
+              if(ts->symbols == 0){
+                     printf("É nulo\n");
+              }
+              Symbol * s;
+              //s = ;
+              for(s = ts->symbols; s != (Symbol *) 0; s = (Symbol *) s->nextSymbol){
+                     printf("Simbolo: %s\n", s->name);
+              }
+       }
+}
 
 void yyerror(char *s){
        fprintf(stderr, "%s\n", s);
@@ -1976,5 +2066,6 @@ int main(){
        //TreeScope * root;
        //yydebug =  1;
        yyparse();
+       check_type();
        return 0;
 }

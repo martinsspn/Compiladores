@@ -23,6 +23,7 @@ typedef struct TreeScope{
 typedef struct Symbol{
     char* name;
     int paramFunc;
+    int isOperand;
     int type;
     struct Symbol *nextSymbol;
 } Symbol;
