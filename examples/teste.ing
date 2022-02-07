@@ -1,8 +1,8 @@
 module mergesort;
 
-merge : int arr[], left, mid, right -> bool
+merge : int arr[]; int left; int mid; int right -> bool
 {
-    int i = 0;
+    int i = 'a';
     int j = 0;
     int k;
     int n1 = m - l + 1;

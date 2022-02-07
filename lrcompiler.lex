@@ -52,10 +52,10 @@ string \".*.\"
 "default"                 col += yyleng; return KW_DEFAULT;
 "gotoconsideredharmful"   col += yyleng; return KW_GOTO;
 "label"                   col += yyleng; return KW_LABEL;
-"int"                     col += yyleng; return KW_INT;
+"int"                     col += yyleng; yylval.itype = 1; return KW_INT;
 "bool"                    col += yyleng; return KW_BOOL;
-"float"                   col += yyleng; return KW_FLOAT;
-"char"                    col += yyleng; return KW_CHAR;
+"float"                   col += yyleng; yylval.itype = 2; return KW_FLOAT;
+"char"                    col += yyleng; yylval.itype = 3; return KW_CHAR;
 "void"                    col += yyleng; return KW_VOID;
 "return"                  col += yyleng; return KW_RETURN;
 "start"                   col += yyleng; return KW_START;

@@ -8,11 +8,9 @@ typedef enum {false, true} bool;
 
 /**
  * Como abordagem vamos definir que os tipos serão representados por inteiors
- * 0 - int
- * 1 - float
- * 2 - char
- * 3 - bool
- * 4 - name function
+ * 1 - int
+ * 2 - float
+ * 3 - char
  */
 
 typedef struct TreeScope{

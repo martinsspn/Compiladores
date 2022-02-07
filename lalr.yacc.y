@@ -9,9 +9,9 @@ int yylex();
 
 
 Symbol * sym_table;
-Symbol * addSymbol(char* nome, int param);
+Symbol * addSymbol(char* nome, int param, int type);
 Symbol * findSymbol(char * nome);
-void install(char *nome, int paramfunc);
+void install(char *nome, int paramfunc, int type);
 void context_check(char *nome);
 void criarNovoSimbolo(TreeScope * ts, char * name, int type);
 %}
@@ -27,7 +27,7 @@ void criarNovoSimbolo(TreeScope * ts, char * name, int type);
 %%
 
 PROG :        /* empty */     
-       | KW_MODULE IDENTIFIER ';' GLOBALS { install( $<string>2, 0 ); }
+       | KW_MODULE IDENTIFIER ';' GLOBALS { install( $<string>2, 0, 0 ); }
        ;
 
 GLOBALS :  /* empty */
@@ -42,7 +42,7 @@ GLOBAL : FUNCTION
 FUNCTION : FUNCTIONHEADER FUNCTIONREST
            ;
 
-FUNCTIONHEADER : MODIFIERS IDENTIFIER ':' PARAMLIST ARROW RETURNTYPE { install($<string>2, 0); }
+FUNCTIONHEADER : MODIFIERS IDENTIFIER ':' PARAMLIST ARROW RETURNTYPE { install($<string>2, 0, 0); }
                ;
 
 FUNCTIONREST : ';'
@@ -68,7 +68,7 @@ MOREPARAM :
           | ',' PARAM MOREPARAM
           ;
 
-PARAM : REFERENCE IDENTIFIER DIMENSIONBLOCK { install( $<string>2, 1 ); }
+PARAM : REFERENCE IDENTIFIER DIMENSIONBLOCK  { install( $<string>2, 1, $<itype>1 ); }
       ;
 
 RETURNTYPE : KW_VOID DIMENSIONBLOCK
@@ -91,12 +91,12 @@ CODE :
      | STATEMENT CODE
      ;
 
-STATEMENT : KW_LABEL IDENTIFIER ';' { install($<string>2, 0); }
+STATEMENT : KW_LABEL IDENTIFIER ';' { install($<string>2, 0, 0); }
           | ';'
           | KW_BREAK ';'
           | KW_CONTINUE ';'
           | KW_IF '(' EXPRESSION ')' BLOCK elseBLOCK
-          | KW_GOTO IDENTIFIER ';' { install($<string>2,0); }
+          | KW_GOTO IDENTIFIER ';' { install($<string>2,0, 0); }
           | KW_WHILE '(' EXPRESSION ')' KW_DO BLOCK
           | KW_DO BLOCK KW_WHILE '(' EXPRESSION ')'
           | KW_SWITCH '(' EXPRESSION ')' '{' SWITCHCASES KW_DEFAULT BLOCK '}'
@@ -116,7 +116,7 @@ SWITCHCASES :
 DECLARATIONBLOCK : TYPE DECLARATION RESTDECLARATION
                  ;
 
-DECLARATION : REFERENCE IDENTIFIER INDEXBLOCK INITIALIZER { install($<string>2, 0); }
+DECLARATION : REFERENCE IDENTIFIER INDEXBLOCK INITIALIZER { install($<string>2, 0, $<itype>1); }
             ;
 
 RESTDECLARATION : 
@@ -128,8 +128,8 @@ INDEXBLOCK :
            | '[' IDENTIFIER ']' INDEXBLOCK
            ;
 
-INITIALIZER : 
-            | '=' EXPRESSION
+INITIALIZER : { $<itype>$ = 0; }
+            | '=' EXPRESSION { $<itype>$ = $<itype>2; }
             ;
 
 EXPRESSION : LOGICALOR RESTEXPRESSION
@@ -209,37 +209,44 @@ SHIFTOPERATOR : OP_BITWISE_LSHIFT
               | OP_BITWISE_RSHIFT
               ;
 
-ADDITION : MULTIPLICATION RESTADDITION
+ADDITION : SUBTRACTION RESTADDITION { $<itype>$ = $<itype>1 + $<itype>2; }
          ;
 
-RESTADDITION : 
-             | ADDITIONOPERATOR MULTIPLICATION RESTADDITION
+RESTADDITION : { $<itype>$ = 0; }
+             | '+' SUBTRACTION RESTADDITION { $<itype>$ = $<itype>2 + $<itype>3; }
              ;
 
-ADDITIONOPERATOR : '+'
-                 | '-'
-                 ;
+SUBTRACTION : MULTIPLICATION RESTSUBTRACTION { $<itype>$ = $<itype>1 - $<itype>2; }
+            ;
 
-MULTIPLICATION : UNARY3 RESTMULTIPLICATION
+RESTSUBTRACTION : { $<itype>$ = 0; }
+                | '-' MULTIPLICATION RESTSUBTRACTION { $<itype>$ = $<itype>2 - $<itype>3; }
+                ;
+
+
+MULTIPLICATION : DIVIDE RESTMULTIPLICATION { $<itype>$ = $<itype>1 * $<itype>2; }
                ;
 
-RESTMULTIPLICATION : 
-                   | MULTIPLICATIONOPERATOR UNARY3 RESTMULTIPLICATION
+RESTMULTIPLICATION : { $<itype>$ = 1; }
+                   | '*' UNARY3 RESTMULTIPLICATION { $<itype>$ = $<itype>2 * $<itype>3; }
                    ;
 
-MULTIPLICATIONOPERATOR : '*'
-                       | '/'
-                       | '%'
-                       ;
+
+DIVIDE : UNARY3 RESTDIVIDE { $<itype>$ = $<itype>1 / $<itype>2; }
+       ;
+
+RESTDIVIDE: { $<itype>$ = 1; }
+          | '/' UNARY3 RESTDIVIDE { $<itype>$ = $<itype>2 / $<itype>3; }
+          ;
 
 UNARY3 : UNARY2
        | '&' UNARY2
        | '*' UNARY2
        ;
 
-UNARY2 : FACTOR
-       | '+' FACTOR
-       | '-' FACTOR
+UNARY2 : FACTOR { $<itype>$ = $<itype>1; }
+       | '+' FACTOR { $<itype>$ = $<itype>2; }
+       | '-' FACTOR { $<itype>$ = (-1) * $<itype>2; }
        | '!' FACTOR
        ;
 
@@ -272,11 +279,31 @@ IMMEDIATE : KW_TRUE
 
 %%
 
-Symbol * addSymbol(char* nome, int param){
-       printf("NOME = %s\n", nome);
+//TreeScope * newScopeSibling(char* nome){
+//       TreeScope * ts;
+//       ts = (TreeScope *) malloc (sizeof(TreeScope));
+//       ts->name = (char *) malloc(strlen(nome)+1);
+//       strcmp(ts->name, nome);
+//       ts->nextSiblingScope = (struct TreeScope *) tree_table;
+//       tree_table = ts;
+//       return ts;
+//}
+//
+//TreeScope * newScopeChild(char* nome){
+//       TreeScope * ts;
+//       ts = (TreeScope *) malloc (sizeof(TreeScope));
+//       ts->name = (char *) malloc(strlen(nome)+1);
+//       strcmp(ts->name, nome);
+//       ts->firstChildScope = (struct TreeScope *) tree_table;
+//       tree_table = ts;
+//       return ts;
+//}
+
+Symbol * addSymbol(char* nome, int param, int type){
        Symbol *s;
        s = (Symbol *) malloc (sizeof(Symbol));
        s->name = (char *) malloc(strlen(nome)+1);
+       s->type = type;
        s->paramFunc = param;
        strcpy(s->name, nome);
        s->nextSymbol = (struct Symbol *) sym_table;
@@ -294,11 +321,11 @@ Symbol * findSymbol(char * nome){
        return 0;
 }
 
-void install(char * nome, int paramfunc){
+void install(char * nome, int paramfunc, int type){
        Symbol * s;
        s = findSymbol(nome);
        if(s == 0){
-              s = addSymbol(nome, paramfunc);
+              s = addSymbol(nome, paramfunc, type);
        } else{
               printf("%s já foi declarado\n", nome);
        }
